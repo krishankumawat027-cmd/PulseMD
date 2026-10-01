@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title id="title">Illustrated online doctor</title>
+  <desc id="desc">A lightweight teal healthcare illustration of an online doctor consultation.</desc>
+  <defs>
+    <linearGradient id="coatGradient" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dffaf5"/>
+    </linearGradient>
+    <linearGradient id="tealGradient" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0fb9b1"/>
+      <stop offset="1" stop-color="#10b981"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="14" flood-color="#0fb9b1" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="320" height="320" rx="40" fill="#f7fffd"/>
+  <circle cx="160" cy="160" r="132" fill="#e8f8f7"/>
+  <circle cx="110" cy="92" r="22" fill="#d9f7ef"/>
+  <circle cx="232" cy="112" r="16" fill="#c9f3e8"/>
+  <circle cx="252" cy="224" r="22" fill="#ecfdf5"/>
+  <g filter="url(#softShadow)">
+    <path d="M95 258c12-54 36-82 65-82s53 28 65 82H95Z" fill="url(#coatGradient)" stroke="#c9ddd9" stroke-width="3"/>
+    <path d="M128 185 160 228l32-43" fill="none" stroke="#0fb9b1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="160" cy="126" r="48" fill="#f7d8bf"/>
+    <path d="M112 122c3-43 28-67 57-62 27 4 45 28 39 66-22-18-57-20-96-4Z" fill="#123b37"/>
+    <path d="M138 138c12 10 30 10 44 0" fill="none" stroke="#7c4b37" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="143" cy="121" r="4" fill="#123b37"/>
+    <circle cx="180" cy="121" r="4" fill="#123b37"/>
+    <path d="M104 230h112" stroke="#0fb9b1" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <g fill="none" stroke="url(#tealGradient)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M228 194v-34h34m-17-17v34" stroke-width="10"/>
+    <rect x="52" y="194" width="52" height="38" rx="12" stroke-width="5"/>
+    <path d="M66 213h24M78 201v24" stroke-width="5"/>
+  </g>
+</svg>

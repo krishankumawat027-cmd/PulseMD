@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.notificationsPageTitle">Doctor Notifications | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorNotificationsPage()">
+  <main class="doctor-main">
+    <section class="container">
+      <section class="page-head">
+        <div>
+          <p class="eyebrow" data-i18n="doctor.notificationsEyebrow">Doctor notifications</p>
+          <h1 data-i18n="doctor.patientRequestUpdates">Patient request updates</h1>
+          <p class="muted" data-i18n="doctor.notificationsSubtitle">Review AI intake requests and chat join notifications.</p>
+        </div>
+        <div class="dashboard-header-actions">
+          <div class="notification-bell-wrap">
+            <button type="button" class="icon-button notification-icon-button" aria-label="Doctor notifications" data-i18n-aria-label="doctor.notificationsEyebrow" aria-expanded="false" onclick="toggleDoctorNotificationDropdown(event)">
+              <span class="ui-icon emoji-icon" aria-hidden="true">&#x1F514;</span>
+              <span id="doctorNotificationBadge" class="badge notification-badge" hidden>0</span>
+            </button>
+            <div id="doctorNotificationDropdown" class="notification-dropdown" hidden>
+              <div class="notification-dropdown-head">
+                <strong data-i18n="common.notifications">Notifications</strong>
+                <a href="/doctor-notifications.html" data-i18n="phrases.View all">View all</a>
+              </div>
+              <div id="doctorNotificationDropdownList" class="notification-dropdown-list"></div>
+            </div>
+          </div>
+          <button type="button" class="secondary" onclick="markDoctorNotificationsRead()" data-i18n="buttons.markAllRead">Mark all as read</button>
+        </div>
+      </section>
+
+      <div class="notification-filter-tabs" role="tablist" aria-label="Doctor notification filters" data-i18n-aria-label="doctor.notificationFilters">
+        <button type="button" class="active" data-notification-filter="all" onclick="setDoctorNotificationFilter('all')" data-i18n="filters.all">All</button>
+        <button type="button" data-notification-filter="unread" onclick="setDoctorNotificationFilter('unread')" data-i18n="status.unread">Unread</button>
+        <button type="button" data-notification-filter="requests" onclick="setDoctorNotificationFilter('requests')" data-i18n="doctor.requestsFilter">Requests</button>
+        <button type="button" data-notification-filter="appointments" onclick="setDoctorNotificationFilter('appointments')" data-i18n="common.appointments">Appointments</button>
+        <button type="button" data-notification-filter="payments" onclick="setDoctorNotificationFilter('payments')" data-i18n="common.payments">Payments</button>
+      </div>
+
+      <section id="doctorNotificationsList" class="doctor-notification-list"></section>
+    </section>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>

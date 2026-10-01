@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="dashboard.pageTitle">Patient Dashboard | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    :root {
+      --patient-primary: #22c55e;
+      --patient-primary-dark: #15803d;
+      --patient-soft: #ecfdf5;
+      --patient-danger: #dc2626;
+      --patient-danger-soft: #fef2f2;
+      --patient-text: #0f172a;
+      --patient-muted: #64748b;
+      --patient-border: #e2e8f0;
+      --patient-card: #ffffff;
+      --patient-shadow: 0 0.75rem 1.875rem rgba(15, 23, 42, 0.08);
+      --patient-radius: 1rem;
+      --patient-page-gutter: clamp(1rem, 3vw, 2rem);
+    }
+
+    html {
+      overflow-x: hidden;
+    }
+
+    .patient-dashboard-page {
+      min-width: 20rem;
+      margin: 0;
+      overflow-x: hidden;
+      background: linear-gradient(180deg, #f8fafc 0%, #ecfdf5 46%, #f8fafc 100%);
+      color: var(--patient-text);
+      font-family: Inter, Poppins, "Noto Sans Devanagari", "Segoe UI", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    html[lang="hi"] .patient-dashboard-page {
+      font-family: "Noto Sans Devanagari", Inter, Poppins, "Segoe UI", Arial, sans-serif;
+    }
+
+    .patient-dashboard-page *,
+    .patient-dashboard-page *::before,
+    .patient-dashboard-page *::after {
+      box-sizing: border-box;
+    }
+
+    .patient-dashboard-page img,
+    .patient-dashboard-page svg {
+      max-width: 100%;
+    }
+
+    .patient-dashboard-page .patient-topbar {
+      position: sticky;
+      top: 0.75rem;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: minmax(14rem, auto) minmax(0, 1fr);
+      align-items: center;
+      gap: 1rem;
+      width: min(calc(100% - (var(--patient-page-gutter) * 2)), 75rem);
+      margin: 0.75rem auto 0;
+      padding: 0.75rem;
+      border: 0.0625rem solid rgba(34, 197, 94, 0.16);
+      border-radius: 1.25rem;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--patient-shadow);
+      backdrop-filter: blur(1rem);
+    }
+
+    .patient-dashboard-page .brand {
+      display: inline-flex;
+      align-items: center;
+      min-width: 0;
+      gap: 0.75rem;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .patient-dashboard-page .brand > div:last-child {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      gap: 0.15rem;
+      line-height: 1.2;
+    }
+
+    .patient-dashboard-page .brand strong {
+      color: var(--patient-text);
+      font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .patient-dashboard-page .brand > div:last-child span {
+      color: var(--patient-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .patient-dashboard-page .brand-badge {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 3.35rem;
+      height: 3.35rem;
+      padding: 0.45rem;
+      overflow: visible;
+      border-radius: 0.9rem;
+      background: linear-gradient(135deg, #2bb673, #16a34a);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: 0;
+      text-align: center;
+      box-shadow: none;
+    }
+
+    .patient-dashboard-page .brand-badge span:last-child {
+      font-size: 1.15em;
+    }
+
+    .patient-dashboard-page .nav-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      padding: 0;
+      border: 0.0625rem solid var(--patient-border);
+      border-radius: 0.75rem;
+      background: #ffffff;
+      color: var(--patient-primary-dark);
+      cursor: pointer;
+    }
+
+    .patient-dashboard-page .hamburger-line {
+      display: block;
+      width: 1.25rem;
+      height: 0.125rem;
+      margin: 0.125rem 0;
+      border-radius: 999rem;
+      background: currentColor;
+    }
+
+    .patient-dashboard-page .patient-nav-menu {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .patient-dashboard-page .patient-nav-menu a,
+    .patient-dashboard-page .patient-nav-menu button,
+    .patient-dashboard-page .patient-nav-actions .language-switcher {
+      min-height: 2.625rem;
+      border-radius: 0.75rem;
+      font-size: 0.86rem;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .patient-dashboard-page .patient-nav-menu a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0 0.65rem;
+      color: #334155;
+      text-decoration: none;
+      transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+    }
+
+    .patient-dashboard-page .patient-nav-menu a:hover,
+    .patient-dashboard-page .patient-nav-menu a.active {
+      transform: translateY(-0.0625rem);
+      background: var(--patient-soft);
+      color: var(--patient-primary-dark);
+    }
+
+    .patient-dashboard-page .patient-nav-icon,
+    .patient-dashboard-page .nav-svg {
+      flex: 0 0 auto;
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    .patient-dashboard-page .nav-svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .patient-dashboard-page .patient-nav-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.4rem;
+      margin-left: 0.35rem;
+    }
+
+    .patient-dashboard-page .patient-nav-actions button,
+    .patient-dashboard-page .patient-nav-actions .language-switcher {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      padding: 0 0.7rem;
+      border: 0.0625rem solid var(--patient-border);
+      background: #ffffff;
+      color: var(--patient-text);
+    }
+
+    .patient-dashboard-page .patient-nav-actions .language-switcher select {
+      min-height: 2rem;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .patient-dashboard-page .patient-nav-actions .danger,
+    .patient-dashboard-page .dashboard-header-actions .danger,
+    .patient-dashboard-page .emergency-fab {
+      border-color: rgba(220, 38, 38, 0.22);
+      background: var(--patient-danger-soft);
+      color: var(--patient-danger);
+    }
+
+    .patient-dashboard-page .patient-nav-actions .secondary,
+    .patient-dashboard-page .dashboard-header-actions .secondary {
+      border-color: rgba(34, 197, 94, 0.22);
+      background: var(--patient-soft);
+      color: var(--patient-primary-dark);
+    }
+
+    .patient-dashboard-main.container {
+      width: min(calc(100% - (var(--patient-page-gutter) * 2)), 75rem);
+      max-width: none;
+      margin: 0 auto;
+      padding: clamp(1.25rem, 3vw, 2rem) 0 clamp(2rem, 5vw, 4rem);
+    }
+
+    .patient-dashboard-page .dashboard-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(16rem, auto);
+      align-items: center;
+      gap: clamp(1rem, 3vw, 1.5rem);
+      width: 100%;
+      margin: 0 0 1.25rem;
+      padding: clamp(1.25rem, 3vw, 2rem);
+      border: 0.0625rem solid rgba(34, 197, 94, 0.14);
+      border-radius: var(--patient-radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--patient-shadow);
+    }
+
+    .patient-dashboard-page .dashboard-hero > div:first-child {
+      min-width: 0;
+    }
+
+    .patient-dashboard-page .eyebrow {
+      margin: 0 0 0.5rem;
+      color: var(--patient-primary-dark);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .patient-dashboard-page .dashboard-hero h1 {
+      margin: 0;
+      color: var(--patient-text);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 950;
+      line-height: 1.08;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    html[lang="hi"] .patient-dashboard-page .dashboard-hero h1 {
+      line-height: 1.18;
+    }
+
+    .patient-dashboard-page .muted {
+      color: var(--patient-muted);
+      line-height: 1.65;
+    }
+
+    .patient-dashboard-page .dashboard-hero .muted {
+      max-width: 42rem;
+      margin: 0.75rem 0 0;
+      font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+    }
+
+    .patient-dashboard-page .dashboard-header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .patient-dashboard-page .dashboard-header-actions > * {
+      flex: 0 1 auto;
+    }
+
+    .patient-dashboard-page .dashboard-header-actions .icon-button,
+    .patient-dashboard-page .dashboard-header-actions .button,
+    .patient-dashboard-page .dashboard-header-actions button,
+    .patient-dashboard-page .dashboard-profile-chip,
+    .patient-dashboard-page .actions .button,
+    .patient-dashboard-page .actions button,
+    .patient-dashboard-page .filter-panel .button,
+    .patient-dashboard-page .form button {
+      min-height: 2.75rem;
+      border-radius: 0.75rem;
+      font-size: 0.92rem;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .patient-dashboard-page .dashboard-header-actions .icon-button {
+      position: relative;
+      width: 2.75rem;
+      padding: 0;
+      border: 0.0625rem solid var(--patient-border);
+      background: #ffffff;
+      color: var(--patient-primary-dark);
+    }
+
+    .patient-dashboard-page .dashboard-header-actions .ui-icon {
+      width: 1.2rem;
+      height: 1.2rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .patient-dashboard-page .dashboard-profile-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.35rem 0.75rem 0.35rem 0.35rem;
+      border: 0.0625rem solid var(--patient-border);
+      background: #ffffff;
+      color: var(--patient-text);
+      box-shadow: none;
+    }
+
+    .patient-dashboard-page .dashboard-profile-chip .avatar {
+      width: 2.1rem;
+      height: 2.1rem;
+      border-radius: 0.7rem;
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .patient-dashboard-page .dashboard-header-actions .button,
+    .patient-dashboard-page .dashboard-header-actions button:not(.icon-button),
+    .patient-dashboard-page .actions .button,
+    .patient-dashboard-page .actions button,
+    .patient-dashboard-page .filter-panel .button,
+    .patient-dashboard-page .form button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 1rem;
+      border: 0.0625rem solid rgba(34, 197, 94, 0.18);
+      background: linear-gradient(135deg, var(--patient-primary), #16a34a);
+      color: #ffffff;
+      text-decoration: none;
+      box-shadow: 0 0.75rem 1.5rem rgba(34, 197, 94, 0.16);
+    }
+
+    .patient-dashboard-page .dashboard-header-actions .danger {
+      box-shadow: 0 0.75rem 1.5rem rgba(220, 38, 38, 0.12);
+    }
+
+    .patient-dashboard-page .dashboard-header-actions .secondary,
+    .patient-dashboard-page .actions .secondary,
+    .patient-dashboard-page .filter-panel .secondary {
+      background: var(--patient-soft);
+      color: var(--patient-primary-dark);
+      box-shadow: none;
+    }
+
+    .patient-dashboard-page .dashboard-header-actions > *:hover,
+    .patient-dashboard-page .actions > *:hover,
+    .patient-dashboard-page .filter-panel .button:hover,
+    .patient-dashboard-page .form button:hover,
+    .patient-dashboard-page .quick-action:hover,
+    .patient-dashboard-page .stat-card:hover,
+    .patient-dashboard-page .doctor-card:hover {
+      transform: translateY(-0.25rem);
+    }
+
+    .patient-dashboard-page .status-line {
+      max-width: 100%;
+      margin: 0.75rem 0 1rem;
+      overflow-wrap: anywhere;
+    }
+
+    .patient-dashboard-page .stat-grid,
+    .patient-dashboard-page .quick-actions-grid,
+    .patient-dashboard-page .wearable-summary-grid,
+    .patient-dashboard-page .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(13.75rem, 1fr));
+      gap: clamp(0.875rem, 2vw, 1.25rem);
+      width: 100%;
+      margin: 0 0 clamp(1rem, 3vw, 1.5rem);
+    }
+
+    .patient-dashboard-page .dashboard-grid {
+      align-items: start;
+    }
+
+    .patient-dashboard-page .stat-card,
+    .patient-dashboard-page .quick-action,
+    .patient-dashboard-page .doctor-card,
+    .patient-dashboard-page .wearable-summary-card {
+      min-width: 0;
+      border: 0.0625rem solid var(--patient-border);
+      border-radius: var(--patient-radius);
+      background: var(--patient-card);
+      box-shadow: 0 0.25rem 1.25rem rgba(15, 23, 42, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .patient-dashboard-page .stat-card,
+    .patient-dashboard-page .quick-action,
+    .patient-dashboard-page .wearable-summary-card {
+      padding: clamp(1rem, 2vw, 1.25rem);
+    }
+
+    .patient-dashboard-page .doctor-card {
+      padding: clamp(1.1rem, 2.5vw, 1.5rem);
+    }
+
+    .patient-dashboard-page .quick-action {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.65rem;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .patient-dashboard-page .quick-action h3,
+    .patient-dashboard-page .doctor-card h2,
+    .patient-dashboard-page .doctor-card h3 {
+      margin: 0;
+      color: var(--patient-text);
+      line-height: 1.25;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .patient-dashboard-page .quick-action p,
+    .patient-dashboard-page .doctor-card p {
+      margin: 0;
+    }
+
+    .patient-dashboard-page .icon-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 0.9rem;
+      background: var(--patient-soft);
+      color: var(--patient-primary-dark);
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .patient-dashboard-page .stat-card strong,
+    .patient-dashboard-page .wearable-summary-card strong {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--patient-text);
+      font-size: clamp(1.55rem, 4vw, 2.25rem);
+      line-height: 1;
+      overflow-wrap: anywhere;
+    }
+
+    .patient-dashboard-page .wearable-summary-card small {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--patient-muted);
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .patient-dashboard-page .section-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .patient-dashboard-page .section-title-row > div:first-child {
+      min-width: min(100%, 16rem);
+      flex: 1 1 18rem;
+    }
+
+    .patient-dashboard-page .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .patient-dashboard-page .form,
+    .patient-dashboard-page .filter-panel {
+      display: grid;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .patient-dashboard-page .form label,
+    .patient-dashboard-page .filter-panel label {
+      display: grid;
+      gap: 0.45rem;
+      min-width: 0;
+      color: var(--patient-text);
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .patient-dashboard-page input,
+    .patient-dashboard-page select,
+    .patient-dashboard-page textarea {
+      width: 100%;
+      max-width: 100%;
+      min-height: 2.75rem;
+      border: 0.0625rem solid var(--patient-border);
+      border-radius: 0.75rem;
+      background: #ffffff;
+      color: var(--patient-text);
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .patient-dashboard-page textarea {
+      min-height: 8rem;
+      resize: vertical;
+    }
+
+    .patient-dashboard-page .symptom-chip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 8.5rem), 1fr));
+      gap: 0.65rem;
+      width: 100%;
+    }
+
+    .patient-dashboard-page .symptom-chip {
+      min-height: 2.5rem;
+      border-radius: 999rem;
+      border: 0.0625rem solid rgba(34, 197, 94, 0.2);
+      background: var(--patient-soft);
+      color: var(--patient-primary-dark);
+      font-size: 0.92rem;
+      font-weight: 800;
+      white-space: normal;
+    }
+
+    .patient-dashboard-page .voice-symptom-card {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .patient-dashboard-page .symptom-voice-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.8rem;
+      align-items: end;
+    }
+
+    .patient-dashboard-page .symptom-language-select {
+      max-width: 14rem;
+    }
+
+    .patient-dashboard-page .symptom-textarea-wrap {
+      position: relative;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .patient-dashboard-page .voice-inline-button {
+      position: absolute;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      width: 3rem;
+      min-height: 3rem;
+      padding: 0;
+      border-radius: 0.75rem;
+      border: 0.0625rem solid rgba(34, 197, 94, 0.22);
+      background: var(--patient-soft);
+      color: var(--patient-primary-dark);
+      box-shadow: none;
+      touch-action: manipulation;
+    }
+
+    .patient-dashboard-page .voice-inline-button.is-listening {
+      border-color: rgba(220, 38, 38, 0.35);
+      background: var(--patient-danger-soft);
+      color: var(--patient-danger);
+    }
+
+    .patient-dashboard-page #symptomText {
+      padding-bottom: 4.6rem;
+    }
+
+    .patient-dashboard-page .voice-status-panel {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      min-height: 2.4rem;
+      padding: 0.65rem 0.75rem;
+      border: 0.0625rem solid rgba(34, 197, 94, 0.16);
+      border-radius: 0.75rem;
+      background: #f8fafc;
+      color: var(--patient-muted);
+      font-weight: 800;
+    }
+
+    .patient-dashboard-page .voice-status-panel.error {
+      border-color: rgba(220, 38, 38, 0.22);
+      background: var(--patient-danger-soft);
+      color: var(--patient-danger);
+    }
+
+    .patient-dashboard-page .listening-dot {
+      display: inline-block;
+      width: 0.72rem;
+      height: 0.72rem;
+      border-radius: 999rem;
+      background: var(--patient-primary);
+    }
+
+    .patient-dashboard-page .voice-status-panel.is-listening .listening-dot {
+      background: var(--patient-danger);
+      animation: dashboardVoicePulse 1.1s ease-out infinite;
+    }
+
+    .patient-dashboard-page .voice-hint {
+      margin: -0.2rem 0 0;
+      color: var(--patient-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .patient-dashboard-page .voice-action-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+
+    .patient-dashboard-page .voice-action-row button,
+    .patient-dashboard-page .voice-action-row .button {
+      width: auto;
+      min-width: 8rem;
+    }
+
+    .patient-dashboard-page .symptom-result-grid {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 0.85rem;
+    }
+
+    .patient-dashboard-page .symptom-result-card {
+      padding: 0.85rem;
+      border: 0.0625rem solid var(--patient-border);
+      border-radius: 0.75rem;
+      background: #ffffff;
+    }
+
+    .patient-dashboard-page .symptom-result-card h4 {
+      margin: 0 0 0.35rem;
+      color: var(--patient-text);
+    }
+
+    .patient-dashboard-page .symptom-result-card p,
+    .patient-dashboard-page .symptom-result-card ul {
+      margin: 0;
+    }
+
+    @keyframes dashboardVoicePulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.34);
+      }
+      100% {
+        box-shadow: 0 0 0 0.75rem rgba(220, 38, 38, 0);
+      }
+    }
+
+    .patient-dashboard-page .dashboard-search-panel {
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+      align-items: end;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .patient-dashboard-page #recentAppointments,
+    .patient-dashboard-page #symptomHistoryList,
+    .patient-dashboard-page #symptomAnalysisResult {
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .patient-dashboard-page .emergency-fab {
+      position: fixed;
+      right: max(1rem, env(safe-area-inset-right));
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      z-index: 35;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      max-width: min(18rem, calc(100vw - 2rem));
+      min-height: 3rem;
+      padding: 0 1rem;
+      border: 0.0625rem solid rgba(220, 38, 38, 0.22);
+      border-radius: 999rem;
+      font-size: 0.92rem;
+      font-weight: 900;
+      line-height: 1;
+      white-space: normal;
+      box-shadow: 0 0.9rem 1.75rem rgba(220, 38, 38, 0.18);
+    }
+
+    .patient-dashboard-page .patient-global-notification {
+      max-width: calc(100vw - 2rem);
+    }
+
+    .patient-dashboard-page .nav-overlay {
+      display: none;
+    }
+
+    @media (max-width: 84rem) {
+      .patient-dashboard-page .patient-topbar {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .patient-dashboard-page .nav-toggle {
+        display: inline-grid;
+      }
+
+      .patient-dashboard-page .patient-nav-menu {
+        position: fixed;
+        inset: 0 0 0 auto;
+        z-index: 60;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        width: clamp(19rem, 36vw, 24rem);
+        max-width: 100%;
+        height: 100dvh;
+        padding: 1rem;
+        overflow-y: auto;
+        background: #ffffff;
+        border-left: 0.0625rem solid var(--patient-border);
+        box-shadow: -1rem 0 2rem rgba(15, 23, 42, 0.14);
+        transform: translateX(105%);
+        transition: transform 0.3s ease;
+      }
+
+      .patient-dashboard-page.nav-open .patient-nav-menu,
+      .patient-dashboard-page .topbar.nav-open .patient-nav-menu,
+      .patient-dashboard-page .patient-topbar.nav-open .patient-nav-menu {
+        transform: translateX(0);
+      }
+
+      .patient-dashboard-page .patient-nav-menu a,
+      .patient-dashboard-page .patient-nav-menu button,
+      .patient-dashboard-page .patient-nav-actions .language-switcher {
+        justify-content: flex-start;
+        width: 100%;
+        min-height: 2.875rem;
+        padding: 0 0.9rem;
+      }
+
+      .patient-dashboard-page .patient-nav-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        margin: 0.5rem 0 0;
+      }
+
+      .patient-dashboard-page .nav-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 55;
+        display: block;
+        background: rgba(15, 23, 42, 0.38);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .patient-dashboard-page.nav-open .nav-overlay,
+      .patient-dashboard-page .topbar.nav-open .nav-overlay,
+      .patient-dashboard-page .patient-topbar.nav-open .nav-overlay {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .patient-dashboard-page .dashboard-hero {
+        grid-template-columns: 1fr;
+      }
+
+      .patient-dashboard-page .dashboard-header-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 48rem) {
+      .patient-dashboard-main.container {
+        width: min(calc(100% - 2rem), 75rem);
+        padding-top: 1rem;
+      }
+
+      .patient-dashboard-page .patient-topbar {
+        width: min(calc(100% - 1rem), 75rem);
+        top: 0.5rem;
+        margin-top: 0.5rem;
+        padding: 0.65rem;
+        border-radius: 1rem;
+      }
+
+      .patient-dashboard-page .brand {
+        gap: 0.6rem;
+      }
+
+      .patient-dashboard-page .brand-badge {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 0.8rem;
+      }
+
+      .patient-dashboard-page .brand strong {
+        max-width: 13rem;
+        white-space: normal;
+      }
+
+      .patient-dashboard-page .brand > div:last-child span {
+        display: none;
+      }
+
+      .patient-dashboard-page .dashboard-hero,
+      .patient-dashboard-page .doctor-card,
+      .patient-dashboard-page .stat-card,
+      .patient-dashboard-page .quick-action,
+      .patient-dashboard-page .wearable-summary-card {
+        border-radius: 0.9rem;
+      }
+
+      .patient-dashboard-page .dashboard-header-actions,
+      .patient-dashboard-page .actions {
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+      }
+
+      .patient-dashboard-page .dashboard-header-actions > *,
+      .patient-dashboard-page .actions > *,
+      .patient-dashboard-page .filter-panel .button,
+      .patient-dashboard-page .form button {
+        width: 100%;
+      }
+
+      .patient-dashboard-page .dashboard-header-actions .icon-button {
+        width: 100%;
+      }
+
+      .patient-dashboard-page .dashboard-profile-chip {
+        justify-content: center;
+      }
+
+      .patient-dashboard-page .emergency-fab {
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+      }
+
+      .patient-dashboard-page .stat-grid,
+      .patient-dashboard-page .quick-actions-grid,
+      .patient-dashboard-page .wearable-summary-grid,
+      .patient-dashboard-page .dashboard-grid,
+      .patient-dashboard-page .dashboard-search-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .patient-dashboard-page .symptom-voice-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .patient-dashboard-page .symptom-language-select {
+        max-width: 100%;
+      }
+
+      .patient-dashboard-page .voice-action-row {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .patient-dashboard-page .voice-action-row button,
+      .patient-dashboard-page .voice-action-row .button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 16rem) {
+      .patient-dashboard-page .stat-grid,
+      .patient-dashboard-page .quick-actions-grid,
+      .patient-dashboard-page .wearable-summary-grid,
+      .patient-dashboard-page .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="patient-dashboard-page" onload="initPatientDashboard()">
+  <main class="container patient-dashboard-main">
+    <section class="dashboard-hero">
+      <div>
+        <p class="eyebrow" id="dashboardDate"></p>
+        <h1><span data-i18n="dashboard.greeting">Hello</span>, <span id="dashboardUserName">Patient</span></h1>
+        <p class="muted" data-i18n="dashboard.subtitle">Your appointments, doctors, payments, chats, and prescriptions in one secure care workspace.</p>
+      </div>
+      <div class="dashboard-header-actions" data-i18n-aria-label="dashboard.headerActionsAria" aria-label="Patient dashboard quick actions">
+        <button type="button" class="icon-button" data-i18n-aria-label="common.notifications" aria-label="Notifications" onclick="window.location.href='/notifications.html'">
+          <span class="ui-icon emoji-icon" aria-hidden="true">&#x1F514;</span>
+          <span id="patientNotificationBadge" class="badge notification-badge" hidden>0</span>
+        </button>
+        <div class="dashboard-profile-chip">
+          <div class="avatar avatar-fallback" data-initials="PT">PT</div>
+          <span data-i18n="labels.patient">Patient</span>
+        </div>
+        <button type="button" class="danger emergency-hero-btn" onclick="App.startEmergencyHelp()">
+          <span class="dashboard-emergency-icon" aria-hidden="true">
+            <svg class="nav-svg nav-icon-emergency" viewBox="0 0 24 24"><path class="emergency-icon-mark" d="M12 2v20M2 12h20"></path></svg>
+          </span>
+          <span data-i18n="dashboard.emergencyHelp">Emergency Help</span>
+        </button>
+        <button type="button" class="secondary" onclick="sharePatientLocation()" data-i18n="dashboard.shareLocation">Share Location</button>
+        <a class="button" href="/doctors.html" data-i18n="dashboard.findDoctors">Find doctors</a>
+      </div>
+    </section>
+    <p id="locationStatus" class="status-line" role="status" aria-live="polite"></p>
+
+    <section class="stat-grid">
+      <article class="stat-card">
+        <span class="muted" data-i18n="dashboard.appointments">Appointments</span>
+        <strong id="appointmentCount">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="muted" data-i18n="dashboard.pending">Pending</span>
+        <strong id="pendingCount">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="muted" data-i18n="dashboard.confirmed">Confirmed</span>
+        <strong id="confirmedCount">0</strong>
+      </article>
+      <article class="stat-card">
+        <span class="muted" data-i18n="dashboard.paymentsDue">Payments due</span>
+        <strong id="paymentDueCount">0</strong>
+      </article>
+    </section>
+
+    <section class="quick-actions-grid">
+      <a class="quick-action" href="/doctors.html"><span class="icon-box">FD</span><h3 data-i18n="dashboard.findDoctors">Find Doctors</h3><p class="muted" data-i18n="dashboard.findDoctorsSubtitle">Search specialists by availability, specialty, and fee.</p></a>
+      <a class="quick-action" href="/appointments.html"><span class="icon-box">AP</span><h3 data-i18n="dashboard.appointmentCardTitle">Appointments</h3><p class="muted" data-i18n="dashboard.appointmentSubtitle">Track upcoming visits and payment status.</p></a>
+      <a class="quick-action" href="/chat.html"><span class="icon-box">CH</span><h3 data-i18n="dashboard.chatTitle">Chat</h3><p class="muted" data-i18n="dashboard.chatSubtitle">Continue conversations after payment.</p></a>
+      <a class="quick-action" href="/prescriptions.html"><span class="icon-box">RX</span><h3 data-i18n="dashboard.prescriptionTitle">Prescriptions</h3><p class="muted" data-i18n="dashboard.prescriptionSubtitle">Download digital prescriptions anytime.</p></a>
+    </section>
+
+    <section class="doctor-card family-profile-section">
+      <div class="section-title-row">
+        <div>
+          <span class="eyebrow">Family care</span>
+          <h2>Family Health Profiles</h2>
+          <p class="muted">Use one account for separate health records, appointments, reports, prescriptions, and consultations for every family member.</p>
+        </div>
+        <div class="actions">
+          <a class="button" href="/family-member.html">Add member</a>
+          <button type="button" class="secondary" onclick="seedFamilyMembers()">Add sample data</button>
+        </div>
+      </div>
+      <div class="filter-panel family-filter-panel" aria-label="Family profile filters">
+        <label>Search member
+          <input id="familySearch" type="search" placeholder="Search by name, relation, blood group" oninput="loadFamilyProfiles()">
+        </label>
+        <label>Relation
+          <select id="familyRelationFilter" onchange="loadFamilyProfiles()">
+            <option value="">All relations</option>
+            <option>Self</option>
+            <option>Father</option>
+            <option>Mother</option>
+            <option>Child</option>
+            <option>Spouse</option>
+            <option>Grandparent</option>
+          </select>
+        </label>
+      </div>
+      <p id="familyProfilesStatus" class="status-line" role="status" aria-live="polite"></p>
+      <div id="familyProfilesList" class="family-profile-grid"></div>
+    </section>
+
+    <section class="doctor-card wearable-dashboard-card">
+      <div class="section-title-row">
+        <div>
+          <span class="eyebrow" data-i18n="dashboard.wearableEyebrow">Wearable insights</span>
+          <h2 data-i18n="dashboard.wearableTitle">Sync health data securely</h2>
+          <p class="muted" data-i18n="dashboard.wearableSubtitle">Wearable readings are supportive health information and not a final medical diagnosis.</p>
+        </div>
+        <div class="actions">
+          <a class="button secondary" href="/profile.html" data-i18n="dashboard.connectWearable">Connect wearable</a>
+          <button type="button" onclick="syncAllWearables()" data-i18n="dashboard.syncNow">Sync now</button>
+        </div>
+      </div>
+      <p id="wearableDataWarning" class="status-line warning" hidden data-i18n="dashboard.wearableWarning">Data not updated. Sync your wearable for recent readings.</p>
+      <div class="wearable-summary-grid">
+        <article class="wearable-summary-card">
+          <span class="muted" data-i18n="dashboard.todaySteps">Today's steps</span>
+          <strong id="wearableSteps">--</strong>
+          <small id="wearableStepsSource" data-i18n="dashboard.dataSourcePlaceholder">Data source: --</small>
+        </article>
+        <article class="wearable-summary-card">
+          <span class="muted" data-i18n="dashboard.latestHeartRate">Latest heart rate</span>
+          <strong id="wearableHeartRate">--</strong>
+          <small id="wearableHeartRateSource" data-i18n="dashboard.dataSourcePlaceholder">Data source: --</small>
+        </article>
+        <article class="wearable-summary-card">
+          <span class="muted" data-i18n="dashboard.lastNightSleep">Last night sleep</span>
+          <strong id="wearableSleep">--</strong>
+          <small id="wearableSleepSource" data-i18n="dashboard.dataSourcePlaceholder">Data source: --</small>
+        </article>
+        <article class="wearable-summary-card">
+          <span class="muted" data-i18n="dashboard.weeklyTrends">Weekly trends</span>
+          <strong id="wearableWeeklyTrend">--</strong>
+          <small id="wearableLastSynced" data-i18n="dashboard.lastSyncedPlaceholder">Last synced: --</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="doctor-card wide-card symptom-checker-card voice-symptom-card">
+        <div class="section-title-row">
+          <div>
+            <span class="eyebrow" data-i18n="dashboard.symptomEyebrow">AI symptom checker</span>
+            <h2 data-i18n="dashboard.symptomTitle">AI Symptom Checker</h2>
+            <p class="muted" data-i18n="dashboard.symptomSubtitle">Speak or type your symptoms. PulseMD - Virtual Clinic suggests possible causes, urgency, and the next care step.</p>
+          </div>
+          <span class="status-pill pending" data-i18n="dashboard.aiAssist">AI assist</span>
+        </div>
+        <form class="form symptom-form" onsubmit="analyzeDashboardSymptoms(event)">
+          <div class="symptom-voice-toolbar">
+            <label class="symptom-language-select">Voice language
+              <select id="symptomVoiceLanguage" onchange="setSymptomVoiceStatus('Ready')">
+                <option value="en-IN">English</option>
+                <option value="hi-IN">Hindi</option>
+              </select>
+            </label>
+            <div id="symptomVoiceStatus" class="voice-status-panel" role="status" aria-live="polite">
+              <span class="listening-dot" aria-hidden="true"></span>
+              <span id="symptomVoiceStatusText">Ready</span>
+            </div>
+          </div>
+          <label data-i18n="dashboard.describeSymptoms">Describe symptoms
+            <span class="symptom-textarea-wrap">
+              <textarea id="symptomText" maxlength="2000" data-i18n-placeholder="dashboard.symptomsPlaceholder" placeholder="Example: I have cough, fever, and sore throat for 3 days."></textarea>
+              <button id="symptomMicButton" type="button" class="voice-inline-button" onclick="toggleSymptomVoiceInput()" aria-label="Start voice input" title="Start voice input">Mic</button>
+            </span>
+          </label>
+          <p class="voice-hint">Example: I have cough, fever, and sore throat for 3 days.</p>
+          <div class="voice-action-row">
+            <button id="symptomStartVoiceBtn" type="button" class="secondary" onclick="startSymptomVoiceInput()">Start Voice</button>
+            <button id="symptomStopVoiceBtn" type="button" class="secondary" onclick="stopSymptomVoiceInput()" disabled>Stop Voice</button>
+            <button id="symptomRestartVoiceBtn" type="button" class="secondary" onclick="restartSymptomVoiceInput()">Restart Voice</button>
+            <button type="button" class="secondary" onclick="clearSymptomChecker()">Clear</button>
+          </div>
+          <div class="symptom-chip-grid" data-i18n-aria-label="dashboard.commonSymptomsAria" aria-label="Common symptoms">
+            <button type="button" class="symptom-chip" data-symptom="fever" data-i18n="dashboard.fever" onclick="toggleSymptomChip(this)">Fever</button>
+            <button type="button" class="symptom-chip" data-symptom="cough" data-i18n="dashboard.cough" onclick="toggleSymptomChip(this)">Cough</button>
+            <button type="button" class="symptom-chip" data-symptom="headache" data-i18n="dashboard.headache" onclick="toggleSymptomChip(this)">Headache</button>
+            <button type="button" class="symptom-chip" data-symptom="chest pain" data-i18n="dashboard.chestPain" onclick="toggleSymptomChip(this)">Chest pain</button>
+            <button type="button" class="symptom-chip" data-symptom="skin rash" data-i18n="dashboard.skinRash" onclick="toggleSymptomChip(this)">Skin rash</button>
+            <button type="button" class="symptom-chip" data-symptom="stomach pain" data-i18n="dashboard.stomachPain" onclick="toggleSymptomChip(this)">Stomach pain</button>
+            <button type="button" class="symptom-chip" data-symptom="weakness" data-i18n="dashboard.weakness" onclick="toggleSymptomChip(this)">Weakness</button>
+          </div>
+          <div class="actions">
+            <button type="submit" data-i18n="dashboard.analyzeSymptoms">Analyze symptoms</button>
+            <a id="bookSuggestedDoctorBtn" class="button secondary" href="/doctors.html" data-i18n="dashboard.bookSuggestedDoctor" hidden>Book Suggested Doctor</a>
+          </div>
+          <p id="symptomCheckerStatus" class="status-line"></p>
+        </form>
+        <div id="symptomAnalysisResult" class="symptom-result" hidden></div>
+        <div>
+          <h3 data-i18n="dashboard.recentSymptomHistory">Recent symptom history</h3>
+          <div id="symptomHistoryList" class="mini-history-list"></div>
+        </div>
+      </article>
+      <article class="doctor-card wide-card">
+        <h2 data-i18n="dashboard.upcomingAppointments">Upcoming appointments</h2>
+        <div id="recentAppointments"></div>
+      </article>
+      <article class="doctor-card wide-card">
+        <h2 data-i18n="dashboard.doctorSearchTitle">Doctor search</h2>
+        <p class="muted" data-i18n="dashboard.doctorSearchSubtitle">Find verified doctors from Mumbai, Delhi, Pune, Ahmedabad, and Bangalore.</p>
+        <div class="filter-panel dashboard-search-panel" data-i18n-aria-label="dashboard.doctorSearchAria" aria-label="Dashboard doctor search">
+          <label data-i18n="dashboard.searchLabel">Search
+            <input type="search" data-i18n-placeholder="dashboard.searchPlaceholder" placeholder="Search doctors or symptoms">
+          </label>
+          <label data-i18n="dashboard.specialtyLabel">Specialty
+            <select><option data-i18n="dashboard.allSpecialties">All specialties</option><option data-i18n="dashboard.generalMedicine">General Medicine</option><option data-i18n="dashboard.cardiology">Cardiology</option><option data-i18n="dashboard.dermatology">Dermatology</option></select>
+          </label>
+          <label data-i18n="dashboard.cityLabel">City
+            <select><option data-i18n="dashboard.allCities">All cities</option><option data-i18n="dashboard.mumbai">Mumbai</option><option data-i18n="dashboard.delhi">Delhi</option><option data-i18n="dashboard.pune">Pune</option><option data-i18n="dashboard.ahmedabad">Ahmedabad</option><option data-i18n="dashboard.bangalore">Bangalore</option></select>
+          </label>
+          <a class="button" href="/doctors.html" data-i18n="dashboard.searchButton">Search</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/patient-dashboard.js"></script>
+</body>
+</html>
+

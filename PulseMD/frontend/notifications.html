@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="initNotifications()">
+  <main class="container">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow" data-i18n="common.notifications">Notifications</p>
+        <h1 data-i18n="notifications.title">Care updates</h1>
+        <p class="muted" data-i18n="notifications.subtitle">Appointments, payments, prescriptions, and chat updates in one place.</p>
+      </div>
+      <button type="button" class="secondary" onclick="markNotificationsRead()" data-i18n="buttons.markAllRead">Mark all as read</button>
+    </section>
+
+    <section class="notifications-tabs">
+      <button class="tab-pill active" type="button" data-patient-notification-filter="all" onclick="setPatientNotificationFilter('all')" data-i18n="filters.all">All</button>
+      <button class="tab-pill" type="button" data-patient-notification-filter="unread" onclick="setPatientNotificationFilter('unread')" data-i18n="status.unread">Unread</button>
+      <button class="tab-pill" type="button" data-patient-notification-filter="appointments" onclick="setPatientNotificationFilter('appointments')" data-i18n="common.appointments">Appointments</button>
+      <button class="tab-pill" type="button" data-patient-notification-filter="chat" onclick="setPatientNotificationFilter('chat')" data-i18n="common.chat">Chat</button>
+      <button class="tab-pill" type="button" data-patient-notification-filter="prescriptions" onclick="setPatientNotificationFilter('prescriptions')" data-i18n="common.prescriptions">Prescriptions</button>
+    </section>
+
+    <section id="notificationsList" class="grid"></section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/notifications.js"></script>
+</body>
+</html>

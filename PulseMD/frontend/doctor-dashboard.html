@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.dashboardPageTitle">Doctor Dashboard | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorDashboard()">
+  <main class="doctor-main">
+    <section class="container doctor-dashboard-shell">
+      <div class="page-head">
+        <div class="dashboard-head-copy">
+          <p class="dashboard-kicker" data-i18n="doctor.workspace">Doctor workspace</p>
+          <h1><span data-i18n="phrases.Welcome, Dr.">Welcome, Dr.</span> <span id="doctorName"></span></h1>
+          <div class="dashboard-head-meta">
+            <span id="verificationBadge" class="status-pill pending" data-i18n="phrases.Pending Review">Pending Review</span>
+            <span class="dashboard-inline-status"><span data-i18n="phrases.Availability">Availability</span>: <span id="availabilityStateText" class="status-pill pending" data-i18n="common.loading">Loading...</span></span>
+          </div>
+          <p class="muted" data-i18n="doctor.dashboardSubtitle">Review patient requests, manage your active hours, and keep consultations moving from one place.</p>
+        </div>
+        <div class="dashboard-header-actions">
+          <div class="notification-bell-wrap">
+            <button type="button" class="icon-button notification-icon-button" aria-label="Doctor notifications" aria-expanded="false" onclick="toggleDoctorNotificationDropdown(event)">
+              <span class="ui-icon emoji-icon" aria-hidden="true">&#x1F514;</span>
+              <span id="doctorNotificationBadge" class="badge notification-badge" hidden>0</span>
+            </button>
+            <div id="doctorNotificationDropdown" class="notification-dropdown" hidden>
+              <div class="notification-dropdown-head">
+                <strong data-i18n="common.notifications">Notifications</strong>
+                <a href="/doctor-notifications.html" data-i18n="phrases.View all">View all</a>
+              </div>
+              <div id="doctorNotificationDropdownList" class="notification-dropdown-list"></div>
+            </div>
+          </div>
+          <div class="dashboard-profile-chip">
+            <div class="avatar avatar-fallback" data-initials="DR">DR</div>
+            <span data-i18n="labels.doctor">Doctor</span>
+          </div>
+          <label class="availability-toggle">
+            <span data-i18n="phrases.Availability">Availability</span>
+            <span><input id="availability" type="checkbox" onchange="toggleDoctorAvailability()"> <span id="availabilityLabel" data-i18n="status.offline">Offline</span></span>
+          </label>
+        </div>
+      </div>
+
+      <section class="stat-grid">
+        <article class="stat-card">
+          <span class="muted" data-i18n="phrases.Pending requests">Pending requests</span>
+          <strong id="pendingCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted" data-i18n="doctor.totalPatients">Total patients</span>
+          <strong id="totalPatientsCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted" data-i18n="phrases.Unread notifications">Unread notifications</span>
+          <strong id="unreadNotificationsCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted" data-i18n="phrases.Active chats">Active chats</span>
+          <strong id="activeChatsCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted" data-i18n="phrases.Appointments today">Appointments today</span>
+          <strong id="todayCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted" data-i18n="doctor.totalEarnings">Total earnings</span>
+          <strong id="dashboardTotalEarnings">INR 0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted" data-i18n="phrases.Closed chats">Closed chats</span>
+          <strong id="closedChatsCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span class="muted" data-i18n="phrases.Reopened chats">Reopened chats</span>
+          <strong id="reopenedChatsCount">0</strong>
+        </article>
+      </section>
+
+      <section id="verificationNotice" class="doctor-card verification-notice" hidden>
+        <h2 data-i18n="phrases.Verification pending review">Verification pending review</h2>
+        <p data-i18n="doctor.verificationLimited">Your verification is pending or rejected. Access is limited.</p>
+        <div class="actions verification-actions">
+          <button type="button" class="secondary" id="demoVerifyBtn" onclick="toggleDemoVerification(true)" data-i18n="doctor.demoVerify">Verify for demo</button>
+        </div>
+        <p id="verificationActionStatus" class="status-line"></p>
+      </section>
+
+      <section class="doctor-dashboard-grid">
+        <article class="doctor-card doctor-profile-card doctor-profile-hero">
+          <div class="doctor-profile-hero-head">
+            <div class="avatar avatar-fallback doctor-profile-avatar" id="doctorProfileAvatar" data-initials="DR">DR</div>
+            <div class="doctor-profile-hero-copy">
+              <p class="dashboard-kicker" data-i18n="doctor.theme">Doctor profile</p>
+              <h2 id="doctorProfileName">Doctor</h2>
+              <p id="doctorSpecialty"></p>
+            </div>
+          </div>
+          <p id="doctorBio"></p>
+          <div class="doctor-profile-meta">
+            <div>
+              <span class="muted" data-i18n="phrases.Contact">Contact</span>
+              <strong id="doctorEmail"></strong>
+            </div>
+            <div>
+              <span class="muted" data-i18n="doctor.registration">Verification</span>
+              <strong id="doctorVerificationSummary">Pending Review</strong>
+            </div>
+          </div>
+        </article>
+        <article class="doctor-card active-time-card">
+          <div class="active-time-head">
+            <div>
+              <h2 data-i18n="phrases.Set Active Time">Set Active Time</h2>
+              <p class="muted" data-i18n="phrases.Choose days and timings when patients can book appointments.">Choose days and timings when patients can book appointments.</p>
+            </div>
+          </div>
+          <form class="form active-time-form" onsubmit="saveDoctorSchedule(event)">
+            <div class="availability-days">
+              <label><input type="checkbox" name="activeDays" value="Mon"> <span data-i18n="days.monday">Monday</span></label>
+              <label><input type="checkbox" name="activeDays" value="Tue"> <span data-i18n="days.tuesday">Tuesday</span></label>
+              <label><input type="checkbox" name="activeDays" value="Wed"> <span data-i18n="days.wednesday">Wednesday</span></label>
+              <label><input type="checkbox" name="activeDays" value="Thu"> <span data-i18n="days.thursday">Thursday</span></label>
+              <label><input type="checkbox" name="activeDays" value="Fri"> <span data-i18n="days.friday">Friday</span></label>
+              <label><input type="checkbox" name="activeDays" value="Sat"> <span data-i18n="days.saturday">Saturday</span></label>
+              <label><input type="checkbox" name="activeDays" value="Sun"> <span data-i18n="days.sunday">Sunday</span></label>
+            </div>
+            <div id="availabilitySlots" class="availability-slots"></div>
+            <div class="actions active-time-actions">
+              <button type="button" class="secondary" onclick="addAvailabilitySlot()" data-i18n="doctor.addSlot">Add slot</button>
+              <button type="submit" data-i18n="doctor.saveAvailability">Save availability</button>
+            </div>
+            <p id="availabilitySaveStatus" class="status-line"></p>
+          </form>
+        </article>
+        <article id="patientRequestsSection" class="doctor-card patient-requests-card">
+          <div class="active-time-head">
+            <div>
+              <h2 data-i18n="phrases.New Patient Requests">New Patient Requests</h2>
+              <p class="muted" data-i18n="phrases.AI intake requests waiting for your review.">AI intake requests waiting for your review.</p>
+            </div>
+          </div>
+          <div id="patientIntakeRequests" class="request-card-grid"></div>
+        </article>
+        <article class="doctor-card doctor-notifications-card">
+          <div class="active-time-head">
+            <div>
+              <h2 data-i18n="common.notifications">Notifications</h2>
+              <p class="muted" data-i18n="doctor.latestNotifications">Latest requests, payments, appointments, and follow-ups.</p>
+            </div>
+            <a class="button secondary" href="/doctor-notifications.html" data-i18n="phrases.Open all">Open all</a>
+          </div>
+          <div id="doctorDashboardNotifications" class="doctor-notification-list compact"></div>
+        </article>
+        <article id="activeEmergencySection" class="doctor-card emergency-doctor-card">
+          <div class="active-time-head">
+            <div>
+              <h2 data-i18n="phrases.Active Emergencies">Active Emergencies</h2>
+              <p class="muted" data-i18n="phrases.Patients who requested urgent PulseMD - Virtual Clinic support.">Patients who requested urgent PulseMD - Virtual Clinic support.</p>
+            </div>
+            <span class="status-pill severe" data-i18n="phrases.Live">Live</span>
+          </div>
+          <div id="activeEmergencyRequests" class="request-card-grid"></div>
+        </article>
+        <article class="doctor-card doctor-earnings-card">
+          <div class="active-time-head">
+            <div>
+              <h2 data-i18n="phrases.Earnings analytics">Earnings analytics</h2>
+              <p class="muted" data-i18n="phrases.Consultation income updates after completed paid appointments.">Consultation income updates after completed paid appointments.</p>
+            </div>
+            <form class="earnings-filter" onsubmit="loadDoctorEarnings(event)">
+              <input id="earningsFrom" type="date" aria-label="From date" data-i18n-aria-label="doctor.fromDate">
+              <input id="earningsTo" type="date" aria-label="To date" data-i18n-aria-label="doctor.toDate">
+              <button type="submit" class="secondary" data-i18n="phrases.Filter">Filter</button>
+            </form>
+          </div>
+          <section class="earnings-stat-grid">
+            <article><span data-i18n="phrases.Today">Today</span><strong id="earningToday">INR 0</strong></article>
+            <article><span data-i18n="phrases.Week">Week</span><strong id="earningWeek">INR 0</strong></article>
+            <article><span data-i18n="phrases.Month">Month</span><strong id="earningMonth">INR 0</strong></article>
+            <article><span data-i18n="phrases.Total">Total</span><strong id="earningTotal">INR 0</strong></article>
+            <article><span data-i18n="phrases.Completed">Completed</span><strong id="earningCompleted">0</strong></article>
+            <article><span data-i18n="phrases.Pending">Pending</span><strong id="earningPending">INR 0</strong></article>
+          </section>
+          <div id="earningsChart" class="earnings-chart" aria-label="Last seven days earnings" data-i18n-aria-label="doctor.lastSevenDaysEarnings"></div>
+          <p id="earningsEmptyState" class="muted" hidden data-i18n="doctor.noEarningsData">No earnings data found</p>
+          <div class="table-wrap earnings-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th data-i18n="labels.patient">Patient</th>
+                  <th data-i18n="doctor.type">Type</th>
+                  <th data-i18n="labels.amount">Amount</th>
+                  <th data-i18n="labels.status">Status</th>
+                  <th data-i18n="labels.consultation">Consultation</th>
+                  <th data-i18n="labels.date">Date</th>
+                </tr>
+              </thead>
+              <tbody id="earningsTransactionsBody"></tbody>
+            </table>
+          </div>
+          <p id="earningsStatus" class="status-line"></p>
+        </article>
+        <article class="doctor-card upcoming-appointments-card">
+          <div class="active-time-head">
+            <div>
+              <h2 data-i18n="doctor.upcomingAppointments">Upcoming appointments</h2>
+              <p class="muted" data-i18n="doctor.upcomingAppointmentsSubtitle">Your next booked consultations and their payment state.</p>
+            </div>
+            <a class="button secondary" href="/doctor-appointments.html" data-i18n="common.open">Open</a>
+          </div>
+          <div id="doctorUpcomingAppointments" class="doctor-notification-list compact"></div>
+        </article>
+        <section class="doctor-card incoming-patients-card">
+          <h2 data-i18n="phrases.Incoming patients">Incoming patients</h2>
+          <div id="incomingPatients" class="grid"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>

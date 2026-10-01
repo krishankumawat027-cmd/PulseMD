@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctors | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="loadDoctors()">
+  <main class="container">
+    <section class="page-head">
+      <div>
+        <h1 data-i18n="doctors.title">Choose a doctor</h1>
+        <p class="muted" data-i18n="doctors.subtitle">Review specialization and consultation fee before booking.</p>
+      </div>
+    </section>
+    <section class="filter-panel doctor-search-panel" aria-label="Doctor search filters">
+      <label class="search-field"><span data-i18n="doctors.searchLabel">Search doctor, clinic, or symptom</span>
+        <input id="doctorSearch" type="search" placeholder="Cardiology, fever, Dr. Sharma" data-i18n-placeholder="doctors.searchPlaceholder" oninput="renderDoctors()">
+      </label>
+      <label><span data-i18n="labels.specialty">Specialty</span>
+        <select id="specialtyFilter" onchange="renderDoctors()">
+          <option value="" data-i18n="labels.allSpecialties">All specialties</option>
+        </select>
+      </label>
+      <label><span data-i18n="labels.city">City</span>
+        <select id="cityFilter" onchange="renderDoctors()">
+          <option value="" data-i18n="labels.allCities">All cities</option>
+          <option>Jaipur</option>
+          <option>Delhi</option>
+          <option>Pune</option>
+          <option>Ahmedabad</option>
+          <option>Bangalore</option>
+        </select>
+      </label>
+      <label><span data-i18n="labels.sort">Sort</span>
+        <select id="doctorSort" onchange="renderDoctors()">
+          <option value="recommended" data-i18n="labels.recommended">Recommended</option>
+          <option value="fee-low" data-i18n="labels.feeLowHigh">Fee low to high</option>
+          <option value="rating" data-i18n="labels.highestRated">Highest rated</option>
+        </select>
+      </label>
+      <a class="button secondary search-action" href="#doctorList" data-i18n="buttons.viewResults">View results</a>
+    </section>
+    <section id="doctorList" class="grid"></section>
+
+    <section id="bookingPanel" class="card booking-panel" hidden>
+      <div class="page-head">
+        <div>
+          <h2 data-i18n="buttons.bookAppointment">Book appointment</h2>
+          <p id="bookingDoctor" class="muted"></p>
+          <p><strong data-i18n="labels.consultationFee">Consultation fee</strong>: <span id="bookingFee">INR 0</span></p>
+          <p><strong data-i18n="labels.doctorStatus">Doctor status</strong>: <span id="bookingAvailability">-</span></p>
+          <p class="muted"><strong data-i18n="labels.activeTime">Active time</strong>: <span id="bookingActiveTime">-</span></p>
+        </div>
+      </div>
+      <form class="form" onsubmit="bookAppointment(event)">
+        <input id="doctorId" type="hidden" name="doctorId">
+        <label><span>Who is this appointment for?</span>
+          <select id="bookingFamilyMember" name="familyMemberId">
+            <option value="">Self / account owner</option>
+          </select>
+        </label>
+        <label><span data-i18n="labels.dateTime">Date and time</span>
+          <input type="datetime-local" name="scheduledAt" required>
+        </label>
+        <label><span data-i18n="labels.issue">Issue</span>
+          <textarea name="reason" placeholder="Briefly describe what you need help with" data-i18n-placeholder="doctors.issuePlaceholder"></textarea>
+        </label>
+        <div class="actions">
+          <button type="submit" data-i18n="buttons.bookContinue">Book and continue</button>
+          <button type="button" class="secondary" onclick="closeBooking()" data-i18n="common.cancel">Cancel</button>
+        </div>
+      </form>
+      <p id="bookingMessage" class="status-line"></p>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctors.js"></script>
+</body>
+</html>

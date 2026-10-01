@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.signupPageTitle">Doctor Signup | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="care-auth-page doctor-auth-page">
+  <header class="topbar auth-topbar">
+    <a class="brand" href="/index.html" aria-label="PulseMD - Virtual Clinic home" data-i18n-aria-label="home.brandAria">
+      <div class="brand-badge"><span>Pulse</span><span>MD</span></div>
+      <div><strong data-i18n="home.brandName">PulseMD - Virtual Clinic</strong><span data-i18n="auth.healthcarePlatform">Healthcare platform</span></div>
+    </a>
+    <button type="button" class="nav-toggle" aria-label="Open menu" data-i18n-aria-label="home.openMenu" aria-expanded="false" onclick="App.toggleNav(this)">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+    <div class="nav-overlay" onclick="App.closeNav()"></div>
+    <nav class="nav nav-drawer" aria-label="Auth navigation" data-i18n-aria-label="auth.authNavigation">
+      <a href="/index.html" data-i18n="home.navHome">Home</a>
+      <a href="/index.html#doctors" data-i18n="home.footerDoctors">Doctors</a>
+      <a href="/index.html#services" data-i18n="home.navServices">Services</a>
+      <a href="/doctor-login.html" data-i18n="auth.doctorLogin">Doctor Login</a>
+      <a class="button active" href="/doctor-signup.html" data-i18n="auth.joinAsDoctor">Join as Doctor</a>
+    </nav>
+  </header>
+  <main class="care-auth-shell care-doctor-auth-shell">
+    <section class="care-auth-panel care-auth-panel-wide">
+      <a class="brand care-auth-brand" href="/index.html" aria-label="PulseMD - Virtual Clinic home" data-i18n-aria-label="home.brandAria">
+        <div class="brand-badge"><span>Pulse</span><span>MD</span></div>
+        <div>
+          <strong data-i18n="doctor.brandName">PulseMD - Virtual Clinic Doctor</strong>
+          <span data-i18n="doctor.buildClinic">Build your verified digital clinic</span>
+        </div>
+      </a>
+
+      <div class="care-auth-heading">
+        <span class="home-kicker" data-i18n="doctor.registration">Doctor registration</span>
+        <h1 data-i18n="doctor.startConsulting">Start consulting patients online</h1>
+        <p data-i18n="doctor.signupSubtitle">Create a verified profile with your medical registration, clinic details, fee, languages, and verification documents.</p>
+      </div>
+
+      <div class="doctor-stepper care-stepper" aria-label="Doctor signup steps">
+        <span class="active"><strong>1</strong> Personal</span>
+        <span><strong>2</strong> Professional</span>
+        <span><strong>3</strong> Documents</span>
+      </div>
+
+      <form class="form care-auth-form" onsubmit="submitDoctorAuth(event, 'signup')">
+        <section class="care-form-section">
+          <div>
+            <p class="eyebrow">Step 1</p>
+            <h2>Personal details</h2>
+          </div>
+          <div class="field-row">
+            <label>Full name
+              <span class="input-icon">
+                <span aria-hidden="true">DR</span>
+                <input type="text" name="name" required autocomplete="name" placeholder="Dr. Ananya Sharma">
+              </span>
+            </label>
+            <label>Email
+              <span class="input-icon">
+                <span aria-hidden="true">EM</span>
+                <input type="email" name="email" required autocomplete="email" placeholder="doctor@example.com">
+              </span>
+            </label>
+          </div>
+          <div class="field-row">
+            <label>Phone
+              <span class="input-icon">
+                <span aria-hidden="true">PH</span>
+                <input type="tel" name="phone" autocomplete="tel" placeholder="+91 98765 43210">
+              </span>
+            </label>
+            <label>Password
+              <span class="input-icon">
+                <span aria-hidden="true">PW</span>
+                <input id="doctorSignupPassword" type="password" name="password" required minlength="6" autocomplete="new-password" placeholder="Minimum 6 characters">
+              </span>
+            </label>
+          </div>
+          <button type="button" class="secondary" onclick="togglePassword('doctorSignupPassword', this)">Show password</button>
+        </section>
+
+        <section class="care-form-section">
+          <div>
+            <p class="eyebrow">Step 2</p>
+            <h2>Professional profile</h2>
+          </div>
+          <div class="field-row">
+            <label>Specialization
+              <select name="specialty" required>
+                <option value="">Select specialization</option>
+                <option>General Medicine</option>
+                <option>Cardiology</option>
+                <option>Dermatology</option>
+                <option>Pediatrics</option>
+                <option>Gynecology</option>
+                <option>Orthopedics</option>
+                <option>Psychiatry</option>
+              </select>
+            </label>
+            <label>Degree
+              <input type="text" name="degreeName" required placeholder="MBBS, MD">
+            </label>
+          </div>
+          <div class="field-row">
+            <label>Medical registration number
+              <input type="text" name="registrationNumber" required placeholder="State council registration number">
+            </label>
+            <label>Experience
+              <input type="number" name="experienceYears" min="0" placeholder="10">
+            </label>
+          </div>
+          <div class="field-row">
+            <label>City
+              <input type="text" name="city" placeholder="Mumbai">
+            </label>
+            <label>Hospital / clinic
+              <input type="text" name="clinic" placeholder="Apollo Clinic">
+            </label>
+          </div>
+          <label>Consultation fee
+            <input type="number" name="fee" min="0" required placeholder="700">
+          </label>
+          <label>Bio
+            <textarea name="bio" placeholder="Short introduction for patients"></textarea>
+          </label>
+          <fieldset class="care-fieldset">
+            <legend>Languages spoken</legend>
+            <span class="checkbox-grid care-checkbox-grid">
+              <label><input type="checkbox" name="languages" value="Hindi"> Hindi</label>
+              <label><input type="checkbox" name="languages" value="English"> English</label>
+              <label><input type="checkbox" name="languages" value="Marathi"> Marathi</label>
+              <label><input type="checkbox" name="languages" value="Gujarati"> Gujarati</label>
+            </span>
+          </fieldset>
+        </section>
+
+        <section class="care-form-section">
+          <div>
+            <p class="eyebrow">Step 3</p>
+            <h2>Verification documents</h2>
+            <p class="muted">Upload clear files for review. Test registration numbers can skip document requirements.</p>
+          </div>
+          <div class="document-grid">
+            <label class="upload-card care-upload-card">
+              <span class="icon-box">DC</span>
+              <strong>Degree certificate</strong>
+              <small>PDF, JPG, PNG, or TXT</small>
+              <input type="file" name="degreeCertificate" accept=".pdf,.txt,.jpg,.jpeg,.png" required>
+            </label>
+            <label class="upload-card care-upload-card">
+              <span class="icon-box">MC</span>
+              <strong>Medical registration certificate</strong>
+              <small>State council registration proof</small>
+              <input type="file" name="medicalRegistrationCertificate" accept=".pdf,.txt,.jpg,.jpeg,.png" required>
+            </label>
+            <label class="upload-card care-upload-card">
+              <span class="icon-box">ID</span>
+              <strong>ID proof</strong>
+              <small>Government ID for verification</small>
+              <input type="file" name="idProof" accept=".pdf,.txt,.jpg,.jpeg,.png" required>
+            </label>
+          </div>
+        </section>
+
+        <button type="submit">Create verified doctor account</button>
+      </form>
+
+      <p class="muted signup-switch"><span data-i18n="auth.alreadyRegistered">Already registered?</span> <a href="/doctor-login.html" data-i18n="auth.doctorLogin">Doctor login</a></p>
+      <button type="button" class="secondary" data-theme-toggle onclick="App.toggleTheme()" data-i18n="common.darkMode">Dark mode</button>
+    </section>
+
+    <aside class="care-auth-visual auth-visual-doctor" aria-label="PulseMD - Virtual Clinic doctor benefits">
+      <div class="auth-floating-chip auth-chip-top">Online OPD</div>
+      <div class="auth-floating-chip auth-chip-bottom">Verified profile</div>
+      <div class="care-auth-visual-card">
+        <span class="status-pill verified">Verified doctor profile</span>
+        <h2>Your premium telemedicine workspace</h2>
+        <p>Manage patient requests, appointments, payments, video calls, chat, and prescriptions from one PulseMD - Virtual Clinic dashboard.</p>
+        <div class="care-auth-mini-grid">
+          <span>Online OPD</span>
+          <span>Secure payments</span>
+          <span>E-prescriptions</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/doctor-auth.js"></script>
+</body>
+</html>

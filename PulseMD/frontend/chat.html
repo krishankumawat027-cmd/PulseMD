@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="ai.pageTitle"></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="initChat()">
+  <main class="container">
+    <section class="chat-layout">
+      <aside class="chat-list">
+        <label><span data-i18n="ai.searchChat"></span>
+          <input type="search" data-i18n-placeholder="ai.searchDoctorPlaceholder" placeholder="">
+        </label>
+        <div id="chatContact" class="chat-contact">
+          <div class="avatar avatar-fallback" data-initials="DR">DR</div>
+          <div>
+            <strong id="chatDoctorName" data-i18n="labels.doctor"></strong>
+            <p class="muted" data-i18n="ai.secureChat"></p>
+          </div>
+        </div>
+      </aside>
+
+      <section class="chat-shell">
+        <div class="chat-head">
+          <div>
+            <h1 id="roomName" data-i18n="ai.title"></h1>
+            <p class="muted"><span data-i18n="labels.status"></span>: <span id="chatStatus" data-i18n="ai.statusConnecting"></span></p>
+            <span id="patientConsultationStatusBadge" class="status-pill active" data-i18n="ai.status.open" hidden></span>
+          </div>
+          <div class="chat-call-actions" data-i18n-aria-label="ai.startCall" aria-label="">
+            <button type="button" class="secondary call-button" onclick="startChatCall('audio')" data-i18n="ai.audio"></button>
+            <button type="button" class="call-button" onclick="startChatCall('video')" data-i18n="buttons.video"></button>
+          </div>
+        </div>
+        <div id="patientChatBanner" class="chat-status-banner" hidden></div>
+        <article id="patientPrescriptionCard" class="doctor-card prescription-shared-card" hidden>
+          <span class="status-pill prescription_sent" data-i18n="ai.prescriptionShared"></span>
+          <h2 data-i18n="ai.prescriptionReady"></h2>
+          <p class="muted" data-i18n="ai.prescriptionReadyDesc"></p>
+          <div class="actions">
+            <a class="button" href="/prescriptions.html" data-i18n="ai.viewPrescription"></a>
+            <a class="button secondary" href="/doctors.html" data-i18n="ai.bookFollowUp"></a>
+          </div>
+        </article>
+        <div id="messages" class="messages"></div>
+        <div id="chatAttachmentPreview" class="attachment-preview" hidden></div>
+        <div id="chatUploadProgress" class="upload-progress" hidden>
+          <span class="upload-progress-label">Uploading 0%</span>
+          <span class="upload-progress-track"><span class="upload-progress-bar"></span></span>
+        </div>
+        <div id="voiceRecorder" class="voice-recorder">
+          <span class="voice-recording-dot" aria-hidden="true"></span>
+          <span id="voiceTimer" class="voice-timer">00:00</span>
+          <button id="voiceStopBtn" type="button" class="secondary" hidden>Stop</button>
+          <button id="voiceCancelBtn" type="button" class="secondary" hidden>Cancel</button>
+        </div>
+        <div id="voicePreview" class="voice-preview" hidden>
+          <audio id="voicePreviewAudio" controls></audio>
+          <span id="voicePreviewDuration" class="voice-message-duration">00:00</span>
+          <button id="voiceSendBtn" type="button">Send voice</button>
+          <button type="button" class="secondary" onclick="document.querySelector('#voiceCancelBtn')?.click()">Delete</button>
+        </div>
+        <p id="chatAttachmentError" class="status-line error" hidden></p>
+        <form class="chat-form" onsubmit="sendMessage(event)">
+          <input id="chatAttachmentInput" type="file" accept=".jpg,.jpeg,.png,.webp,.gif,.heic,.heif,.pdf,.txt,.doc,.docx,.rtf,.mp4,.webm,.mov,.wav,.mp3,.m4a,.ogg,image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf,text/rtf,video/mp4,video/webm,video/quicktime,audio/webm,audio/wav,audio/x-wav,audio/mpeg,audio/mp4,audio/ogg" hidden>
+          <button id="chatAttachmentBtn" type="button" class="secondary attachment-button" aria-label="Attach file" title="Attach file">+</button>
+          <button id="voiceRecordBtn" type="button" class="secondary voice-button" aria-label="Start voice recording" title="Start voice recording">Mic</button>
+          <input id="messageInput" type="text" data-i18n-placeholder="ai.inputPlaceholder" placeholder="" autocomplete="off">
+          <button type="submit" data-i18n="ai.send"></button>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/chat-attachments.js"></script>
+  <script src="/js/chat-voice.js"></script>
+  <script src="/js/chat.js"></script>
+</body>
+</html>

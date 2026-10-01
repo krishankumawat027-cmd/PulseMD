@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="auth.patientRegisterPageTitle">Patient Register | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="care-auth-page patient-register-page">
+  <header class="topbar auth-topbar">
+    <a class="brand" href="/index.html" aria-label="PulseMD - Virtual Clinic home" data-i18n-aria-label="home.brandAria">
+      <div class="brand-badge"><span>Pulse</span><span>MD</span></div>
+      <div><strong data-i18n="home.brandName">PulseMD - Virtual Clinic</strong><span data-i18n="auth.healthcarePlatform">Healthcare platform</span></div>
+    </a>
+    <button type="button" class="nav-toggle" aria-label="Open menu" data-i18n-aria-label="home.openMenu" aria-expanded="false" onclick="App.toggleNav(this)">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+    <div class="nav-overlay" onclick="App.closeNav()"></div>
+    <nav class="nav nav-drawer" aria-label="Auth navigation" data-i18n-aria-label="auth.authNavigation">
+      <a href="/index.html" data-i18n="home.navHome">Home</a>
+      <a href="/index.html#doctors" data-i18n="home.footerDoctors">Doctors</a>
+      <a href="/index.html#services" data-i18n="home.navServices">Services</a>
+      <a href="/login.html" data-i18n="common.login">Login</a>
+      <a class="button active" href="/signup.html" data-i18n="home.register">Register</a>
+    </nav>
+  </header>
+  <main class="care-auth-shell">
+    <section class="care-auth-panel care-auth-panel-wide">
+      <a class="brand care-auth-brand" href="/index.html" aria-label="PulseMD - Virtual Clinic home" data-i18n-aria-label="home.brandAria">
+        <div class="brand-badge"><span>Pulse</span><span>MD</span></div>
+        <div>
+          <strong data-i18n="home.brandName">PulseMD - Virtual Clinic</strong>
+          <span data-i18n="home.tagline">Healthcare that comes to you</span>
+        </div>
+      </a>
+
+      <div class="care-auth-heading">
+        <span class="home-kicker" data-i18n="auth.patientRegister">Patient register</span>
+        <h1 data-i18n="auth.createPatientAccountTitle">Create your PulseMD - Virtual Clinic account</h1>
+        <p data-i18n="auth.createPatientAccountSubtitle">Save your profile once and manage appointments, doctor chat, video visits, payments, and prescriptions from one secure place.</p>
+      </div>
+
+      <div class="care-auth-summary" aria-label="Patient account benefits" data-i18n-aria-label="auth.patientAccountBenefits">
+        <span data-i18n="auth.secureProfile">Secure profile</span>
+        <span data-i18n="auth.fastBooking">Fast booking</span>
+        <span data-i18n="auth.digitalReports">Digital reports</span>
+      </div>
+
+      <form id="signupForm" class="form care-auth-form" onsubmit="submitAuth(event, 'signup')">
+        <input type="hidden" name="role" value="patient">
+
+        <div class="field-row">
+          <label>Full name
+            <span class="input-icon">
+              <span aria-hidden="true">NM</span>
+              <input type="text" name="name" required autocomplete="name" placeholder="Your full name">
+            </span>
+          </label>
+          <label>Email
+            <span class="input-icon">
+              <span aria-hidden="true">EM</span>
+              <input type="email" name="email" required autocomplete="email" placeholder="you@example.com">
+            </span>
+          </label>
+        </div>
+
+        <div class="field-row">
+          <label>Phone
+            <span class="input-icon">
+              <span aria-hidden="true">PH</span>
+              <input type="tel" name="phone" autocomplete="tel" placeholder="+91 98765 43210">
+            </span>
+          </label>
+          <label>Date of birth
+            <span class="input-icon">
+              <span aria-hidden="true">DOB</span>
+              <input type="date" name="dob">
+            </span>
+          </label>
+        </div>
+
+        <fieldset class="care-fieldset">
+          <legend>Gender</legend>
+          <span class="radio-row care-radio-row">
+            <label><input type="radio" name="gender" value="female"> Female</label>
+            <label><input type="radio" name="gender" value="male"> Male</label>
+            <label><input type="radio" name="gender" value="other"> Other</label>
+          </span>
+        </fieldset>
+
+        <div class="field-row">
+          <label>Password
+            <span class="input-icon">
+              <span aria-hidden="true">PW</span>
+              <input id="signupPassword" type="password" name="password" required minlength="6" autocomplete="new-password" placeholder="Minimum 6 characters">
+            </span>
+          </label>
+          <label>Confirm password
+            <span class="input-icon">
+              <span aria-hidden="true">OK</span>
+              <input type="password" name="confirmPassword" required minlength="6" autocomplete="new-password" placeholder="Re-enter password">
+            </span>
+          </label>
+        </div>
+
+        <div class="actions care-auth-actions">
+          <button type="button" class="secondary" onclick="togglePassword('signupPassword', this)">Show password</button>
+          <a class="button secondary" href="/doctor-signup.html">Join as doctor</a>
+        </div>
+
+        <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+        <button type="submit" class="signup-submit">Create patient account</button>
+      </form>
+
+      <p class="muted signup-switch">Already registered? <a href="/login.html">Login</a></p>
+    </section>
+
+    <aside class="care-auth-visual auth-visual-patient" aria-label="PulseMD - Virtual Clinic patient benefits">
+      <div class="care-auth-visual-stack">
+        <div class="care-auth-circle" aria-hidden="true">
+          <span class="care-auth-circle-ring"></span>
+          <span class="care-auth-circle-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path><path d="M4 21a8 8 0 0 1 16 0"></path><path d="M12 15v4M10 17h4"></path></svg>
+          </span>
+        </div>
+        <div class="care-auth-visual-card">
+          <span class="status-pill verified">Doctor online</span>
+          <h2>Trusted care starts with one account</h2>
+          <p>Register once to book doctors, manage consultations, access digital prescriptions, and continue your care journey securely.</p>
+          <div class="care-auth-mini-grid">
+            <span>Verified doctors</span>
+            <span>Digital prescriptions</span>
+            <span>Secure payments</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

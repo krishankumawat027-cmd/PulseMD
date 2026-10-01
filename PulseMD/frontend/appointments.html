@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointments | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="loadPatientAppointments()">
+  <main class="container">
+    <section class="page-head">
+      <div>
+        <h1 data-i18n="appointments.title">Appointment history</h1>
+        <p class="muted" data-i18n="appointments.subtitle">Track consultations, payment status, chat, and video visits.</p>
+      </div>
+      <a class="button" href="/doctors.html" data-i18n="buttons.bookAppointment">Book appointment</a>
+    </section>
+
+    <section class="payment-layout">
+      <article class="doctor-card summary-panel">
+        <h2 data-i18n="appointments.nextVisit">Book your next visit</h2>
+        <div class="doctor-card-header">
+          <div class="avatar avatar-fallback pulsemd-mark" data-initials="PulseMD" aria-label="PulseMD">
+            <span>Pulse</span>
+            <span>MD</span>
+          </div>
+          <div>
+            <h3 data-i18n="appointments.verifiedConsult">Verified online consultation</h3>
+            <p class="muted" data-i18n="appointments.choosePay">Choose a doctor, select time, and pay securely.</p>
+          </div>
+        </div>
+        <div class="date-slot-grid">
+          <button type="button" class="secondary" data-i18n="dates.today">Today</button>
+          <button type="button" class="secondary" data-i18n="dates.tomorrow">Tomorrow</button>
+          <button type="button" class="secondary" data-i18n="dates.thisWeek">This week</button>
+        </div>
+        <div class="actions">
+          <a class="button" href="/doctors.html" data-i18n="appointments.findAvailable">Find available doctors</a>
+        </div>
+      </article>
+
+      <article class="doctor-card summary-panel">
+        <h2 data-i18n="appointments.bookingSummary">Booking summary</h2>
+        <p class="muted" data-i18n="appointments.summaryText">Consultation fee and platform fee are shown before payment on the doctor booking flow.</p>
+        <p><strong data-i18n="labels.consultation">Consultation</strong>: <span data-i18n="appointments.chooseDoctor">choose doctor</span></p>
+        <p><strong data-i18n="labels.platformFee">Platform fee</strong>: <span data-i18n="appointments.includedApplicable">included where applicable</span></p>
+        <p><strong data-i18n="labels.total">Total</strong>: <span data-i18n="appointments.shownCheckout">shown before checkout</span></p>
+      </article>
+    </section>
+
+    <section class="card table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="labels.doctor">Doctor</th>
+            <th data-i18n="labels.dateTime">Date and time</th>
+            <th data-i18n="labels.issue">Issue</th>
+            <th data-i18n="labels.fee">Fee</th>
+            <th data-i18n="common.payments">Payment</th>
+            <th data-i18n="labels.status">Status</th>
+            <th data-i18n="labels.actions">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentsBody"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/appointments.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseMD Admin Login</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <section class="login-screen">
+    <div class="login-card">
+      <div class="brand inline">
+        <div class="brand-mark">P</div>
+        <div>
+          <h1>PulseMD</h1>
+          <p>Virtual Clinic Admin</p>
+        </div>
+      </div>
+
+      <h2>Admin Login</h2>
+      <p class="muted">Default admin account: <strong>admin@gmail.com</strong> / <strong>123456</strong></p>
+
+      <form id="adminLoginForm" class="login-form">
+        <label>
+          Email
+          <input id="email" type="email" placeholder="admin@gmail.com" required />
+        </label>
+        <label>
+          Password
+          <input id="password" type="password" placeholder="Enter password" required />
+        </label>
+        <button class="primary-btn full" type="submit">Login</button>
+      </form>
+
+      <p class="message" id="message"></p>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('adminLoginForm');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      message.textContent = '';
+
+      try {
+        const response = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('email').value.trim().toLowerCase(),
+            password: document.getElementById('password').value,
+            role: 'admin'
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.message || 'Login failed.');
+        }
+
+        if (data.user?.role !== 'admin') {
+          throw new Error('Access denied');
+        }
+
+        localStorage.setItem('pulsemd_admin_token', data.token);
+        localStorage.setItem('pulsemd_admin_user', JSON.stringify(data.user));
+        window.location.href = '/admin';
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    });
+  </script>
+</body>
+</html>

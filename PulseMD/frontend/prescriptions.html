@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prescriptions | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="initPatientPrescriptions()">
+  <main class="container">
+    <section class="page-head">
+      <div>
+        <h1 data-i18n="prescriptions.title">Prescription history</h1>
+        <p class="muted" data-i18n="prescriptions.subtitle">View, download, or print prescriptions from your consultations.</p>
+      </div>
+      <button class="secondary no-print" onclick="window.print()" data-i18n="buttons.printSelected">Print selected</button>
+    </section>
+    <section class="prescription-layout">
+      <aside class="history-panel">
+        <h2 data-i18n="payments.history">History</h2>
+        <div id="prescriptionList"></div>
+      </aside>
+      <section id="prescriptionDetail" class="prescription-sheet" hidden></section>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/prescriptions.js"></script>
+</body>
+</html>

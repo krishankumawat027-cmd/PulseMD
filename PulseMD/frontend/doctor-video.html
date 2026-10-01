@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.videoPageTitle">Doctor Video | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorVideoPage()">
+  <main class="doctor-main">
+    <section class="container">
+      <div class="page-head">
+        <div>
+          <h1 data-i18n="doctor.videoCall">Video call</h1>
+          <p class="muted"><span data-i18n="labels.patient">Patient</span>: <span id="patientName">Patient</span> | <span data-i18n="doctor.room">Room</span>: <span id="roomName"></span></p>
+        </div>
+        <div class="actions">
+          <button id="acceptCallBtn" onclick="acceptDoctorCall()" data-i18n="doctor.acceptCall">Accept call</button>
+          <button id="cameraBtn" class="secondary" onclick="toggleDoctorCamera()" data-i18n="doctor.cameraOff">Camera OFF</button>
+          <button id="muteBtn" class="secondary" onclick="toggleDoctorMute()" data-i18n="doctor.mute">Mute</button>
+          <button class="danger" onclick="endDoctorCall()" data-i18n="doctor.endCall">End call</button>
+        </div>
+      </div>
+      <p id="videoStatus" class="status-line" data-i18n="doctor.ready">Ready.</p>
+
+      <section class="video-grid">
+        <article class="video-card">
+          <h2 data-i18n="doctor.yourCamera">Your camera</h2>
+          <video id="localVideo" autoplay muted playsinline></video>
+        </article>
+        <article class="video-card">
+          <h2 data-i18n="doctor.patientCamera">Patient camera</h2>
+          <video id="remoteVideo" autoplay playsinline></video>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>

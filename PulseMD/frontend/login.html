@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="auth.loginPageTitle">Login | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="care-auth-page care-login-page">
+  <header class="care-login-navbar">
+    <a class="care-login-brand" href="/index.html" aria-label="PulseMD - Virtual Clinic home" data-i18n-aria-label="home.brandAria">
+      <span class="care-login-logo" aria-hidden="true">
+        <span><span>Pulse</span><span>MD</span></span>
+      </span>
+      <span>
+        <strong data-i18n="home.brandName">PulseMD - Virtual Clinic</strong>
+        <small data-i18n="home.tagline">Healthcare that comes to you</small>
+      </span>
+    </a>
+    <nav class="care-login-nav" aria-label="Auth navigation" data-i18n-aria-label="auth.authNavigation">
+      <a href="/index.html" data-i18n="home.navHome">Home</a>
+      <a href="/index.html#services" data-i18n="home.navServices">Services</a>
+      <a href="/doctors.html" data-i18n="common.findDoctors">Find Doctors</a>
+      <a class="active" href="/login.html" data-i18n="common.login">Login</a>
+      <a class="care-login-register" href="/signup.html" data-i18n="home.register">Register</a>
+    </nav>
+  </header>
+  <main class="care-login-shell">
+    <section class="care-login-card">
+      <a class="care-login-card-brand" href="/index.html" aria-label="PulseMD - Virtual Clinic home" data-i18n-aria-label="home.brandAria">
+        <span class="care-login-logo" aria-hidden="true">
+          <span><span>Pulse</span><span>MD</span></span>
+        </span>
+        <div>
+          <strong data-i18n="home.brandName">PulseMD - Virtual Clinic</strong>
+          <span data-i18n="home.tagline">Healthcare that comes to you</span>
+        </div>
+      </a>
+
+      <div class="care-login-heading">
+        <span data-i18n="auth.securePatientAccess">Secure patient access</span>
+        <h1 data-i18n="auth.welcomeBack">Welcome back</h1>
+        <p data-i18n="auth.loginSubtitle">Login to manage appointments, chat with doctors, make payments, and view prescriptions.</p>
+      </div>
+
+      <div id="loginTabsSection" class="care-login-tabs auth-toggle-panel" aria-label="Login type" data-i18n-aria-label="auth.loginType">
+        <a class="active" href="/login.html" data-i18n="auth.patientLogin">Patient Login</a>
+        <a href="/doctor-login.html" data-i18n="auth.doctorLogin">Doctor Login</a>
+      </div>
+
+      <form id="loginFormSection" class="care-login-form auth-toggle-panel" onsubmit="submitAuth(event, 'login')">
+        <label data-i18n="phrases.Email">Email
+          <span class="care-login-input">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"></path><path d="m4 7 8 6 8-6"></path></svg>
+            <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" data-i18n-placeholder="auth.emailPlaceholder">
+          </span>
+        </label>
+
+        <label data-i18n="auth.password">Password
+          <span class="care-login-input">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+            <input id="loginPassword" type="password" name="password" required autocomplete="current-password" placeholder="Enter password" data-i18n-placeholder="auth.passwordPlaceholder">
+            <button type="button" class="care-password-toggle" onclick="togglePassword('loginPassword', this)" data-i18n="auth.show">Show</button>
+          </span>
+        </label>
+
+        <div class="care-login-links">
+          <a href="/signup.html" data-i18n="auth.createPatientAccount">Create patient account</a>
+          <a id="forgotPasswordLink" href="#resetPasswordSection" onclick="showForgotPassword(event)" data-i18n="auth.forgotPassword">Forgot password?</a>
+        </div>
+
+        <p id="authMessage" class="auth-message" role="status" aria-live="polite"></p>
+        <button type="submit" data-i18n="auth.loginSecurely">Login securely</button>
+      </form>
+
+      <form id="resetPasswordSection" class="care-login-form forgot-password-form auth-toggle-panel is-auth-hidden" hidden aria-hidden="true" style="display: none;" onsubmit="submitForgotPassword(event)">
+        <div class="care-login-heading compact">
+          <span data-i18n="auth.passwordHelp">Password help</span>
+          <h2 data-i18n="auth.resetYourPassword">Reset your password</h2>
+          <p data-i18n="auth.resetPasswordHelpText">Enter your registered email. In development, the reset link is printed in the backend console.</p>
+        </div>
+        <label data-i18n="phrases.Email">Email
+          <span class="care-login-input">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"></path><path d="m4 7 8 6 8-6"></path></svg>
+            <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" data-i18n-placeholder="auth.emailPlaceholder">
+          </span>
+        </label>
+        <p id="forgotPasswordMessage" class="auth-message" role="status" aria-live="polite"></p>
+        <button type="submit" data-i18n="auth.sendResetLink">Send reset link</button>
+        <button id="backToLoginButton" type="button" class="secondary" onclick="hideForgotPassword()" data-i18n="auth.backToLogin">Back to login</button>
+      </form>
+
+      <div class="care-login-bottom">
+        <a href="/doctor-signup.html" data-i18n="auth.joinAsDoctor">Join as doctor</a>
+        <button type="button" data-theme-toggle onclick="App.toggleTheme()" data-i18n="common.darkMode">Dark mode</button>
+      </div>
+    </section>
+
+    <aside class="care-login-visual" aria-label="PulseMD - Virtual Clinic secure care preview">
+      <div class="care-consultation-wrap">
+        <div class="care-consultation-visual" aria-hidden="true">
+          <div class="care-consultation-doctor-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"></path><path d="M4 21a8 8 0 0 1 16 0"></path><path d="M12 15v4M10 17h4"></path></svg>
+          </div>
+        </div>
+        <article class="care-consultation-card">
+          <div class="care-consultation-body">
+            <span class="care-consultation-status">Doctor online</span>
+            <h2>Consultation unlocked after payment</h2>
+            <p>Private chat, video visit, and digital prescription stay connected to your secure PulseMD - Virtual Clinic profile after payment.</p>
+          </div>
+          <div class="care-login-mini-grid care-consultation-tags">
+            <span>300+ doctors</span>
+            <span>4.8 rating</span>
+            <span>Secure records</span>
+          </div>
+        </article>
+      </div>
+    </aside>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

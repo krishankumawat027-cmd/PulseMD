@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.profilePageTitle">Doctor Profile | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorProfile()">
+  <main class="doctor-main">
+    <section class="container">
+      <div class="page-head">
+        <div>
+          <h1 data-i18n="doctor.profileAndSettings">Profile and settings</h1>
+          <p class="muted" data-i18n="doctor.profileSubtitle">PulseMD - Virtual Clinic doctor profile.</p>
+        </div>
+      </div>
+      <section class="grid">
+        <article class="doctor-card">
+          <h2 id="profileName">Doctor</h2>
+          <p id="profileSpecialty"></p>
+          <p id="profileEmail" class="muted"></p>
+          <p><strong data-i18n="doctor.feeLabel">Fee:</strong> <span id="profileFee">INR 0</span></p>
+          <p><span id="profileVerification" class="status-pill pending">Pending Review</span></p>
+        </article>
+        <article class="doctor-card">
+          <h2 data-i18n="doctor.profileAndSettings">Profile and settings</h2>
+          <p class="muted" data-i18n="doctor.profileSubtitle">PulseMD - Virtual Clinic doctor profile.</p>
+          <form class="form" onsubmit="saveDoctorProfile(event)">
+            <label>Name
+              <input type="text" id="doctorProfileNameInput" placeholder="Doctor name">
+            </label>
+            <label>Email
+              <input type="email" id="doctorProfileEmailInput" placeholder="doctor@example.com" disabled>
+            </label>
+            <label>Phone
+              <input type="text" id="doctorProfilePhoneInput" placeholder="+91...">
+            </label>
+            <label>Specialization
+              <input type="text" id="doctorProfileSpecializationInput" placeholder="General Medicine">
+            </label>
+            <label>Consultation fee
+              <input type="number" id="doctorProfileFeeInput" min="0" placeholder="499">
+            </label>
+            <label>Experience years
+              <input type="number" id="doctorProfileExperienceInput" min="0" placeholder="5">
+            </label>
+            <label>City
+              <input type="text" id="doctorProfileCityInput" placeholder="City">
+            </label>
+            <label>Clinic
+              <input type="text" id="doctorProfileClinicInput" placeholder="Clinic name">
+            </label>
+            <label>Bio
+              <textarea id="doctorProfileBioInput" rows="4" placeholder="Short professional bio"></textarea>
+            </label>
+            <div class="actions">
+              <button type="submit" data-i18n="common.save">Save</button>
+            </div>
+            <p id="doctorProfileStatus" class="status-line"></p>
+          </form>
+        </article>
+        <article class="doctor-card">
+          <h2 data-i18n="doctor.paymentSettings">Payment Settings</h2>
+          <p class="muted" data-i18n="doctor.paymentSettingsSubtitle">You can add or update payout details anytime after login.</p>
+          <form class="form" onsubmit="saveDoctorPaymentSettings(event)">
+            <label data-i18n="doctor.upiId">UPI ID
+              <input type="text" id="upiId" placeholder="name@bank" data-i18n-placeholder="doctor.upiPlaceholder">
+            </label>
+            <label data-i18n="doctor.bankAccountHolderName">Bank account holder name
+              <input type="text" id="bankAccountHolderName" placeholder="Account holder name" data-i18n-placeholder="doctor.bankAccountHolderPlaceholder">
+            </label>
+            <label data-i18n="doctor.bankAccountNumber">Bank account number
+              <input type="text" id="bankAccountNumber" placeholder="Bank account number" data-i18n-placeholder="doctor.bankAccountNumberPlaceholder">
+            </label>
+            <label data-i18n="doctor.ifscCode">IFSC code
+              <input type="text" id="ifscCode" placeholder="SBIN0001234" data-i18n-placeholder="doctor.ifscPlaceholder">
+            </label>
+            <label data-i18n="doctor.paymentQrCode">Payment QR code URL (optional)
+              <input type="url" id="paymentQrCode" placeholder="https://..." data-i18n-placeholder="doctor.paymentQrPlaceholder">
+            </label>
+            <div class="actions">
+              <button type="submit" data-i18n="doctor.savePaymentSettings">Save payment settings</button>
+            </div>
+            <p id="paymentSettingsStatus" class="status-line"></p>
+          </form>
+        </article>
+        <article class="doctor-card">
+          <h2 data-i18n="doctor.theme">Theme</h2>
+          <p data-i18n="doctor.themeSubtitle">Dark mode is saved on this browser.</p>
+          <button class="secondary" data-theme-toggle onclick="App.toggleTheme()" data-i18n="common.darkMode">Dark mode</button>
+        </article>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>

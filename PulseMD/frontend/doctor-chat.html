@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.chatPageTitle">Doctor Chat | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorChat()">
+  <main class="doctor-main">
+    <section class="container">
+      <section class="chat-shell">
+        <div class="chat-head consultation-chat-head">
+          <div>
+            <h1><span data-i18n="doctor.chatWith">Chat with</span> <span id="patientName">Patient</span></h1>
+            <p class="muted"><span data-i18n="doctor.room">Room</span>: <span id="roomName"></span> | <span id="chatStatus">Connecting...</span></p>
+            <span id="consultationStatusBadge" class="status-pill active" data-i18n="ai.status.open">Open</span>
+          </div>
+          <div class="chat-control-actions">
+            <button type="button" class="secondary call-button" onclick="startDoctorChatCall('audio')" data-i18n="ai.audio">Audio</button>
+            <button type="button" class="secondary call-button" onclick="startDoctorChatCall('video')" data-i18n="buttons.video">Video</button>
+            <button type="button" class="secondary" onclick="goToDoctorPrescription()" data-i18n="doctor.sendPrescription">Send Prescription</button>
+            <button type="button" class="danger" id="closeChatBtn" onclick="closeConsultationChat()" data-i18n="doctor.closeChat">Close Chat</button>
+            <button type="button" class="secondary" id="reopenChatBtn" onclick="reopenConsultationChat()" hidden data-i18n="doctor.reopenChat">Reopen Chat</button>
+          </div>
+        </div>
+        <div id="doctorChatBanner" class="chat-status-banner" hidden></div>
+        <div id="messages" class="messages"></div>
+        <div id="chatAttachmentPreview" class="attachment-preview" hidden></div>
+        <div id="chatUploadProgress" class="upload-progress" hidden>
+          <span class="upload-progress-label">Uploading 0%</span>
+          <span class="upload-progress-track"><span class="upload-progress-bar"></span></span>
+        </div>
+        <div id="voiceRecorder" class="voice-recorder">
+          <span class="voice-recording-dot" aria-hidden="true"></span>
+          <span id="voiceTimer" class="voice-timer">00:00</span>
+          <button id="voiceStopBtn" type="button" class="secondary" hidden>Stop</button>
+          <button id="voiceCancelBtn" type="button" class="secondary" hidden>Cancel</button>
+        </div>
+        <div id="voicePreview" class="voice-preview" hidden>
+          <audio id="voicePreviewAudio" controls></audio>
+          <span id="voicePreviewDuration" class="voice-message-duration">00:00</span>
+          <button id="voiceSendBtn" type="button">Send voice</button>
+          <button type="button" class="secondary" onclick="document.querySelector('#voiceCancelBtn')?.click()">Delete</button>
+        </div>
+        <p id="chatAttachmentError" class="status-line error" hidden></p>
+        <form class="chat-form" onsubmit="sendDoctorMessage(event)">
+          <input id="chatAttachmentInput" type="file" accept=".jpg,.jpeg,.png,.webp,.gif,.heic,.heif,.pdf,.txt,.doc,.docx,.rtf,.mp4,.webm,.mov,image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,application/pdf,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/rtf,text/rtf,video/mp4,video/webm,video/quicktime" hidden>
+          <button id="chatAttachmentBtn" type="button" class="secondary attachment-button" aria-label="Attach file" title="Attach file">+</button>
+          <button id="voiceRecordBtn" type="button" class="secondary voice-button" aria-label="Start voice recording" title="Start voice recording">🎤</button>
+          <input id="messageInput" type="text" placeholder="Type your reply..." data-i18n-placeholder="doctor.typeReplyPlaceholder" autocomplete="off">
+          <button type="submit" data-i18n="ai.send">Send</button>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/chat-attachments.js"></script>
+  <script src="/js/chat-voice.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>

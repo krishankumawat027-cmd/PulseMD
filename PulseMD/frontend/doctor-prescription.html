@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.createPrescriptionPageTitle">Create Prescription | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorPrescriptionPage()">
+  <main class="doctor-main">
+    <section class="container">
+      <div class="page-head">
+        <div>
+          <h1 data-i18n="doctor.createPrescription">Create prescription</h1>
+          <p class="muted"><span data-i18n="labels.patient">Patient</span>: <span id="patientName">Patient</span></p>
+        </div>
+      </div>
+
+      <section class="two-col">
+        <form class="card booking-panel form" onsubmit="submitPrescription(event)">
+          <input id="patientId" type="hidden">
+          <input id="appointmentId" type="hidden">
+          <div id="medicineRows"></div>
+          <button type="button" class="secondary" onclick="addMedicineRow()" data-i18n="doctor.addMedicine">Add medicine</button>
+          <label data-i18n="labels.notes">Notes
+            <textarea id="notes" placeholder="Clinical notes" data-i18n-placeholder="doctor.clinicalNotesPlaceholder"></textarea>
+          </label>
+          <label data-i18n="doctor.advice">Advice
+            <textarea id="advice" placeholder="Rest, diet, follow-up advice" data-i18n-placeholder="doctor.advicePlaceholder"></textarea>
+          </label>
+          <button type="submit" data-i18n="doctor.sendPrescription">Send prescription</button>
+          <p id="prescriptionStatus" class="status-line"></p>
+        </form>
+
+        <section>
+          <h2 data-i18n="doctor.recentlySent">Recently sent</h2>
+          <div id="sentPrescriptions" class="grid"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', addMedicineRow);</script>
+</body>
+</html>

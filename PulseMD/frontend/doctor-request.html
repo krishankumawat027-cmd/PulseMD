@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.patientRequestPageTitle">Patient Request | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorRequestDetail()">
+  <main class="doctor-main">
+    <section class="container">
+      <section class="page-head">
+        <div>
+          <p class="eyebrow" data-i18n="doctor.aiIntakeRequest">AI intake request</p>
+          <h1 data-i18n="doctor.patientRequestDetails">Patient request details</h1>
+          <p class="muted" data-i18n="doctor.requestDetailsSubtitle">Review the AI-collected details before joining chat.</p>
+        </div>
+        <a class="button secondary" href="/doctor-dashboard.html#patientRequestsSection" data-i18n="doctor.backToDashboard">Back to dashboard</a>
+      </section>
+
+      <section id="requestDetail" class="doctor-card request-detail-card">
+        <p class="muted" data-i18n="doctor.loadingPatientRequest">Loading patient request...</p>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>

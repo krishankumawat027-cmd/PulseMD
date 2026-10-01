@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="common.profile">Profile | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="initPatientProfile()">
+  <main class="container">
+    <section class="dashboard-hero">
+      <div>
+        <p class="eyebrow" data-i18n="common.profile">Profile</p>
+        <h1 id="profileName">Patient</h1>
+        <p id="profileEmail" class="muted"></p>
+      </div>
+      <div class="dashboard-header-actions">
+        <div id="profileLanguageMount"></div>
+        <button class="secondary" data-theme-toggle onclick="App.toggleTheme()" data-i18n="common.darkMode">Dark mode</button>
+      </div>
+    </section>
+
+    <section class="profile-layout">
+      <aside class="history-panel">
+        <div class="profile-tabs">
+          <button class="tab-pill active" type="button" data-i18n="phrases.Personal info">Personal info</button>
+          <button class="tab-pill" type="button" data-i18n="phrases.Medical history">Medical history</button>
+          <button class="tab-pill" type="button" data-i18n="phrases.Saved doctors">Saved doctors</button>
+        </div>
+      </aside>
+      <article class="profile-card">
+        <h2 data-i18n="phrases.Personal information">Personal information</h2>
+        <form class="form" onsubmit="savePatientProfile(event)">
+          <div class="field-row">
+            <label data-i18n="phrases.Full name">Full name<input id="profileNameInput" type="text" placeholder="Patient name" data-i18n-placeholder="phrases.Patient name"></label>
+            <label data-i18n="phrases.Email">Email<input id="profileEmailInput" type="email" placeholder="patient@example.com"></label>
+          </div>
+          <div class="field-row">
+            <label data-i18n="phrases.Phone">Phone<input id="profilePhoneInput" type="tel" placeholder="+91 98765 43210"></label>
+          </div>
+          <label data-i18n="phrases.Medical notes">Medical notes<textarea id="profileNotesInput" placeholder="Allergies, existing conditions, regular medicines" data-i18n-placeholder="phrases.Allergies, existing conditions, regular medicines"></textarea></label>
+          <p id="profileSaveMessage" class="auth-message" role="status" aria-live="polite"></p>
+          <button type="submit" data-i18n="phrases.Save profile">Save profile</button>
+        </form>
+      </article>
+      <article class="profile-card emergency-contact-card">
+        <div class="section-title-row">
+          <div>
+            <span class="eyebrow" data-i18n="phrases.Emergency support">Emergency support</span>
+            <h2 data-i18n="phrases.Emergency contact">Emergency contact</h2>
+            <p class="muted" data-i18n="phrases.This contact is used when you trigger Emergency Help from your dashboard.">This contact is used when you trigger Emergency Help from your dashboard.</p>
+          </div>
+          <a id="emergencyCallNow" class="button secondary" href="#" hidden data-i18n="phrases.Call Now">Call Now</a>
+        </div>
+        <form class="form" onsubmit="saveEmergencyContact(event)">
+          <div class="field-row">
+            <label data-i18n="phrases.Contact name">Contact name<input id="emergencyContactNameInput" type="text" required placeholder="Family member name" data-i18n-placeholder="phrases.Family member name"></label>
+            <label data-i18n="phrases.Phone number">Phone number<input id="emergencyContactPhoneInput" type="tel" required placeholder="+91 98765 43210" data-i18n-placeholder="phrases.+91 98765 43210"></label>
+          </div>
+          <div id="savedEmergencyContact" class="saved-contact-box muted" data-i18n="phrases.No emergency contact saved yet.">No emergency contact saved yet.</div>
+          <p id="emergencyContactMessage" class="auth-message" role="status" aria-live="polite"></p>
+          <button type="submit" data-i18n="phrases.Save emergency contact">Save emergency contact</button>
+        </form>
+      </article>
+      <article class="profile-card wearable-settings-card">
+        <div class="section-title-row">
+          <div>
+            <span class="eyebrow" data-i18n="dashboard.wearableEyebrow">Wearable insights</span>
+            <h2 data-i18n="phrases.Connect your wearable">Connect your wearable</h2>
+            <p class="muted" data-i18n="phrases.Sync health data securely from supported devices and health platforms.">Sync health data securely from supported devices and health platforms.</p>
+          </div>
+          <button type="button" class="secondary" onclick="loadWearableSettings()" data-i18n="phrases.Refresh">Refresh</button>
+        </div>
+        <div class="consent-box">
+          <strong data-i18n="phrases.Privacy consent">Privacy consent</strong>
+          <p class="muted" data-i18n="phrases.By connecting a wearable, you allow PulseMD - Virtual Clinic to securely sync selected health metrics for your dashboard. You can disconnect anytime.">By connecting a wearable, you allow PulseMD - Virtual Clinic to securely sync selected health metrics for your dashboard. You can disconnect anytime.</p>
+          <p class="muted" data-i18n="dashboard.wearableSubtitle">Wearable readings are supportive health information and not a final medical diagnosis.</p>
+        </div>
+        <div id="wearableProviderList" class="wearable-provider-grid"></div>
+        <p id="wearableSettingsStatus" class="status-line" role="status" aria-live="polite"></p>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Health Profile | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="initFamilyMemberPage()">
+  <main class="container family-member-page">
+    <section class="page-head">
+      <div>
+        <span class="eyebrow">Family care</span>
+        <h1 id="familyPageTitle">Add family member</h1>
+        <p class="muted">Keep appointments, reports, prescriptions, and symptom history separate for each person using this account.</p>
+      </div>
+      <div class="actions">
+        <a class="button secondary" href="/patient-dashboard.html">Back to dashboard</a>
+        <a id="bookMemberBtn" class="button" href="/doctors.html" hidden>Book appointment</a>
+      </div>
+    </section>
+
+    <p id="familyMemberStatus" class="status-line" role="status" aria-live="polite"></p>
+
+    <section class="family-member-layout">
+      <article class="doctor-card family-profile-editor">
+        <h2>Profile details</h2>
+        <form id="familyMemberForm" class="form family-form" onsubmit="saveFamilyMember(event)">
+          <label>Full name
+            <input name="fullName" required placeholder="Example: Ramesh Sharma">
+          </label>
+          <label>Age
+            <input name="age" type="number" min="0" max="130" required placeholder="62">
+          </label>
+          <label>Gender
+            <select name="gender">
+              <option value="prefer_not_to_say">Prefer not to say</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>Relation to account owner
+            <input name="relation" required placeholder="Self, Father, Mother, Child">
+          </label>
+          <label>Blood group
+            <input name="bloodGroup" placeholder="O+, A-, B+">
+          </label>
+          <label>Quick health status
+            <input name="quickHealthStatus" placeholder="Stable, Needs BP monitoring">
+          </label>
+          <label>Allergies
+            <textarea name="allergies" placeholder="Food, medicine, dust, or no known allergy"></textarea>
+          </label>
+          <label>Chronic diseases
+            <textarea name="chronicDiseases" placeholder="Diabetes, BP, asthma, thyroid"></textarea>
+          </label>
+          <label>Current medicines
+            <textarea name="currentMedicines" placeholder="Medicine name, dosage, timing"></textarea>
+          </label>
+          <label>Past medical history
+            <textarea name="pastMedicalHistory" placeholder="Surgeries, hospitalizations, long-term illness"></textarea>
+          </label>
+          <label>Emergency contact
+            <input name="emergencyContact" placeholder="+91 98765 43210">
+          </label>
+          <label>Address
+            <textarea name="address" placeholder="Village, city, district, state"></textarea>
+          </label>
+          <label>Profile photo URL (optional)
+            <input name="profilePhotoUrl" type="url" placeholder="https://...">
+          </label>
+          <label class="checkbox-row">
+            <input name="isSelf" type="checkbox">
+            <span>This profile is for the account owner</span>
+          </label>
+          <div class="actions">
+            <button type="submit">Save profile</button>
+            <a class="button secondary" href="/patient-dashboard.html">Cancel</a>
+          </div>
+        </form>
+      </article>
+
+      <aside class="doctor-card family-profile-summary" id="familyProfileSummary" hidden>
+        <div id="familySummaryCard"></div>
+        <hr>
+        <h3>Upload report</h3>
+        <form id="familyReportForm" class="form" onsubmit="uploadFamilyReport(event)">
+          <label>Report title
+            <input name="title" placeholder="Blood test report">
+          </label>
+          <label>Record type
+            <select name="type">
+              <option value="report">Report</option>
+              <option value="lab_report">Lab report</option>
+              <option value="document">Document</option>
+              <option value="image">Image</option>
+              <option value="prescription">Prescription</option>
+            </select>
+          </label>
+          <label>File
+            <input name="file" type="file" accept="image/*,application/pdf" required>
+          </label>
+          <label>Notes
+            <textarea name="notes" placeholder="Optional notes for doctor"></textarea>
+          </label>
+          <button type="submit">Upload report</button>
+        </form>
+      </aside>
+    </section>
+
+    <section id="familyMedicalTimeline" class="family-detail-grid" hidden>
+      <article class="doctor-card">
+        <h2>Appointments</h2>
+        <div id="memberAppointments" class="family-record-list"></div>
+      </article>
+      <article class="doctor-card">
+        <h2>Prescriptions</h2>
+        <div id="memberPrescriptions" class="family-record-list"></div>
+      </article>
+      <article class="doctor-card">
+        <h2>Uploaded reports</h2>
+        <div id="memberReports" class="family-record-list"></div>
+      </article>
+      <article class="doctor-card">
+        <h2>Symptom history</h2>
+        <div id="memberSymptomHistory" class="family-record-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/family-member.js"></script>
+</body>
+</html>

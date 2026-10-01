@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body onload="initVideoPage()">
+  <main class="container">
+    <section class="doctor-strip card">
+      <div id="doctorImage" class="avatar avatar-fallback" data-initials="DR">DR</div>
+      <div>
+        <h2 id="doctorName">Selected doctor</h2>
+        <p class="muted"><span id="doctorSpecialization">Online consultation</span> | Fee: <span id="doctorFee">Shown during booking</span></p>
+      </div>
+    </section>
+
+    <section class="page-head">
+      <div>
+        <h1 id="callTitle">Video call</h1>
+        <p class="muted">Room: <span id="roomName"></span> | Timer: <span id="timer" class="timer">00:00</span></p>
+      </div>
+      <div class="actions">
+        <button id="joinBtn" onclick="joinCall()">Join call</button>
+        <button id="cameraBtn" class="secondary" onclick="toggleCamera()">Camera off</button>
+        <button id="muteBtn" class="secondary" onclick="toggleMute()">Mute</button>
+        <button class="danger" onclick="leaveCall()">Leave</button>
+      </div>
+    </section>
+
+    <p id="videoStatus" class="status-line">Ready.</p>
+
+    <section class="video-grid">
+      <article class="video-card">
+        <h2 id="localCallLabel">Your camera</h2>
+        <video id="localVideo" autoplay muted playsinline></video>
+      </article>
+      <article class="video-card">
+        <h2 id="remoteCallLabel">Doctor camera</h2>
+        <video id="remoteVideo" autoplay playsinline></video>
+      </article>
+    </section>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/video.js"></script>
+</body>
+</html>

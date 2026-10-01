@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseMD Admin Panel</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="admin-shell" id="adminShell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">P</div>
+        <div>
+          <h1>PulseMD</h1>
+          <p>Virtual Clinic</p>
+        </div>
+      </div>
+
+      <nav class="side-nav" aria-label="Admin navigation">
+        <a href="#" class="active" data-view="dashboard">Dashboard</a>
+        <a href="#" data-view="doctors">Doctors</a>
+        <a href="#" data-view="patients">Patients</a>
+        <a href="#" data-view="appointments">Appointments</a>
+        <a href="#" data-view="emergencies">Emergency</a>
+        <a href="#" data-view="uploads">Reports</a>
+        <a href="#" data-view="payments">Payments</a>
+        <a href="#" data-view="analytics">Analytics</a>
+      </nav>
+    </aside>
+
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div>
+          <p class="eyebrow">Admin Control Center</p>
+          <h2 id="pageTitle">Dashboard</h2>
+        </div>
+        <div class="admin-user">
+          <div class="avatar">A</div>
+          <div class="admin-copy">
+            <strong id="adminName">Admin</strong>
+            <span id="adminEmailText">admin</span>
+          </div>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+      </header>
+
+      <section class="hero-card">
+        <div>
+          <p class="eyebrow">Healthcare that comes to you</p>
+          <h3>PulseMD System Monitor</h3>
+          <p>Track doctors, patients, appointments, reports, payments, emergency alerts, and AI usage from one working admin panel.</p>
+        </div>
+        <button class="primary-btn" id="refreshBtn">Refresh Data</button>
+      </section>
+
+      <div class="toast" id="toast"></div>
+
+      <section class="view active" id="dashboardView">
+        <div class="stats-grid">
+          <article class="stat-card"><span>Total Doctors</span><strong id="totalDoctors">0</strong><small id="pendingDoctors">0 pending verification</small></article>
+          <article class="stat-card green"><span>Total Patients</span><strong id="totalPatients">0</strong><small>Registered patients</small></article>
+          <article class="stat-card cyan"><span>Appointments</span><strong id="totalAppointments">0</strong><small>All appointment records</small></article>
+          <article class="stat-card red"><span>Emergency Alerts</span><strong id="totalEmergency">0</strong><small>Active emergency alerts</small></article>
+          <article class="stat-card"><span>Reports</span><strong id="totalUploads">0</strong><small>Uploaded files</small></article>
+          <article class="stat-card green"><span>AI Checks</span><strong id="totalAi">0</strong><small>Symptom checker usage</small></article>
+          <article class="stat-card cyan"><span>Revenue</span><strong id="totalRevenue">Rs. 0</strong><small>Paid consultations</small></article>
+        </div>
+
+        <section class="content-grid">
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">Recent</p><h3>Appointments</h3></div></div>
+            <div class="cards-list" id="recentAppointments"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">Urgent</p><h3>Emergency Alerts</h3></div></div>
+            <div class="cards-list" id="recentEmergencies"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="view" id="doctorsView">
+        <article class="panel">
+          <div class="panel-head">
+            <div><p class="eyebrow">Manage</p><h3>Doctor Verification</h3></div>
+            <input id="doctorSearch" class="search-input" type="search" placeholder="Search doctors" />
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Specialization</th><th>Fee</th><th>Status</th><th>Actions</th></tr></thead><tbody id="doctorTable"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="view" id="patientsView">
+        <article class="panel">
+          <div class="panel-head">
+            <div><p class="eyebrow">Manage</p><h3>Patients</h3></div>
+            <input id="patientSearch" class="search-input" type="search" placeholder="Search patients" />
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="patientTable"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="view" id="appointmentsView">
+        <article class="panel">
+          <div class="panel-head">
+            <div><p class="eyebrow">Manage</p><h3>Appointments</h3></div>
+            <input id="appointmentSearch" class="search-input" type="search" placeholder="Search appointments" />
+          </div>
+          <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Payment</th><th>Change</th></tr></thead><tbody id="appointmentTable"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="view" id="emergenciesView">
+        <article class="panel">
+          <div class="panel-head"><div><p class="eyebrow">Emergency</p><h3>Alerts</h3></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Type</th><th>Contact</th><th>Status</th><th>Location</th><th>Change</th></tr></thead><tbody id="emergencyTable"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="view" id="uploadsView">
+        <article class="panel">
+          <div class="panel-head"><div><p class="eyebrow">Medical Files</p><h3>Reports & Uploads</h3></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Owner</th><th>Category</th><th>File</th><th>Type</th><th>Date</th></tr></thead><tbody id="uploadTable"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="view" id="paymentsView">
+        <article class="panel">
+          <div class="panel-head"><div><p class="eyebrow">Revenue</p><h3>Payments</h3></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Patient</th><th>Doctor</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="paymentTable"></tbody></table></div>
+        </article>
+      </section>
+
+      <section class="view" id="analyticsView">
+        <div class="analytics-grid">
+          <article class="panel"><div class="panel-head compact"><div><p class="eyebrow">Users</p><h3>Users by Role</h3></div></div><div id="usersChart" class="mini-chart"></div></article>
+          <article class="panel"><div class="panel-head compact"><div><p class="eyebrow">Bookings</p><h3>Appointments by Status</h3></div></div><div id="appointmentsChart" class="mini-chart"></div></article>
+          <article class="panel"><div class="panel-head compact"><div><p class="eyebrow">Payments</p><h3>Payments by Status</h3></div></div><div id="paymentsChart" class="mini-chart"></div></article>
+          <article class="panel"><div class="panel-head compact"><div><p class="eyebrow">AI</p><h3>Symptom Urgency</h3></div></div><div id="aiChart" class="mini-chart"></div></article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal hidden" id="editModal">
+    <form class="modal-card" id="editForm">
+      <h3>Edit User</h3>
+      <input type="hidden" id="editUserId" />
+      <label>Name<input id="editName" required /></label>
+      <label>Phone<input id="editPhone" /></label>
+      <label>Specialty<input id="editSpecialty" /></label>
+      <label>Consultation Fee<input id="editFee" type="number" min="0" /></label>
+      <div class="modal-actions">
+        <button type="button" class="action-btn" id="closeModal">Cancel</button>
+        <button type="submit" class="primary-btn">Save Changes</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/admin.js"></script>
+</body>
+</html>

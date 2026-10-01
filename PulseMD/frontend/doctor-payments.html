@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.paymentsPageTitle">Doctor Payments | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorPayments()">
+  <main class="doctor-main">
+    <section class="container">
+      <div class="page-head">
+        <div>
+          <h1 data-i18n="phrases.Payment status">Payment status</h1>
+          <p class="muted" data-i18n="phrases.Track consultation fees and payment IDs.">Track consultation fees and payment IDs.</p>
+        </div>
+      </div>
+      <section class="card table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="labels.patient">Patient</th>
+              <th data-i18n="labels.amount">Amount</th>
+              <th data-i18n="labels.status">Status</th>
+              <th data-i18n="labels.date">Date</th>
+              <th data-i18n="phrases.Payment ID">Payment ID</th>
+            </tr>
+          </thead>
+          <tbody id="paymentsBody"></tbody>
+        </table>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>

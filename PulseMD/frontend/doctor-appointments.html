@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="doctor.appointmentsPageTitle">Doctor Appointments | PulseMD - Virtual Clinic</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="doctor-layout doctor-app" onload="initDoctorAppointments()">
+  <main class="doctor-main">
+    <section class="container">
+      <div class="page-head">
+        <div>
+          <h1 data-i18n="common.appointments">Appointments</h1>
+          <p class="muted" data-i18n="doctor.appointmentsSubtitle">Accept, reject, or mark consultations as completed.</p>
+        </div>
+      </div>
+      <p id="appointmentsStatus" class="status-line" aria-live="polite"></p>
+
+      <section class="card table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="labels.patient">Patient</th>
+              <th data-i18n="labels.dateTime">Date and time</th>
+              <th data-i18n="labels.issue">Issue</th>
+              <th data-i18n="labels.fee">Fee</th>
+              <th data-i18n="common.payments">Payment</th>
+              <th data-i18n="labels.status">Status</th>
+              <th data-i18n="labels.actions">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="appointmentsBody"></tbody>
+        </table>
+      </section>
+    </section>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="/js/config.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/doctor.js"></script>
+</body>
+</html>
