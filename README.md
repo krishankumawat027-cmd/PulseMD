@@ -421,8 +421,8 @@ BCA Student | Full Stack Web Developer | AI & Startup Explorer
 
 ### Connect
 
-* GitHub: `https://github.com/krishankumawat027-cmd`
-* LinkedIn: `https://www.linkedin.com/in/krishan-kumawat-80b682391`
+* GitHub: "https://github.com/krishankumawat027-cmd"
+* LinkedIn: "https://www.linkedin.com/in/krishan-kumawat-80b682391"
 
 ---
 
