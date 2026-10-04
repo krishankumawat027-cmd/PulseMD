@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "api": {
+      "root": "PulseMD/api",
+      "framework": "express"
+    },
+    "backend": {
+      "root": "PulseMD/backend",
+      "framework": "express"
+    },
+    "react-client": {
+      "root": "PulseMD/react-client",
+      "framework": "vite"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": {
+        "service": "api"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "react-client"
+      }
+    }
+  ]
+}

@@ -140,6 +140,15 @@ Video:
 
 ## Deployment
 
+Vercel services:
+
+- The repository root `vercel.json` configures `api`, `backend`, and `react-client` as separate services.
+- `/api/*` is routed publicly to the `api` service.
+- All other public paths are routed to the `react-client` service.
+- The `backend` service is currently internal because no service-to-service calls to it were found.
+- The React client uses same-origin `/api` requests by default. Set `VITE_API_URL` only when intentionally using a different API origin.
+- No service bindings are configured: the application code does not currently call another internal Vercel service.
+
 Render backend:
 
 - Use `backend` as the root directory.
