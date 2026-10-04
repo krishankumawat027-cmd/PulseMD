@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const videoCallSchema = new mongoose.Schema(
   {
+    callId: {
+      type: String,
+      unique: true,
+      required: true,
+      index: true
+    },
     patientId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -32,7 +38,7 @@ const videoCallSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['ringing', 'connected', 'ended', 'missed'],
+      enum: ['calling', 'ringing', 'accepted', 'declined', 'ended', 'missed'],
       default: 'ringing',
       index: true
     },
@@ -40,6 +46,18 @@ const videoCallSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true
+    },
+    startedAt: {
+      type: Date,
+      default: null
+    },
+    acceptedAt: {
+      type: Date,
+      default: null
+    },
+    declinedAt: {
+      type: Date,
+      default: null
     },
     connectedAt: {
       type: Date,
@@ -52,5 +70,12 @@ const videoCallSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+videoCallSchema.pre('validate', function assignCallId(next) {
+  if (!this.callId) {
+    this.callId = `call_${new Date().getTime()}_${Math.random().toString(36).slice(2, 10)}`;
+  }
+  next();
+});
 
 module.exports = mongoose.model('VideoCall', videoCallSchema);

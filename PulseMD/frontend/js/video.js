@@ -13,7 +13,7 @@ const stunConfig = {
 function initVideoPage() {
   App.mountPatientNav('appointments');
   App.requireAuth();
-  room = localStorage.getItem('doctorRoom');
+  room = localStorage.getItem('activeCallRoomId') || localStorage.getItem('doctorRoom');
   const doctor = JSON.parse(localStorage.getItem('activeDoctor') || 'null');
   callMode = localStorage.getItem('callMode') === 'audio' ? 'audio' : 'video';
   document.body.classList.toggle('audio-call', callMode === 'audio');
@@ -46,6 +46,12 @@ function initVideoPage() {
     $('#doctorImage').setAttribute('data-initials', '👨‍⚕️');
     $('#doctorImage').textContent = '👨‍⚕️';
     $('#doctorImage').className = 'avatar avatar-fallback doctor-illustration';
+  }
+
+  const activeCallId = localStorage.getItem('activeVideoCallId') || localStorage.getItem('incomingCallId');
+  if (activeCallId && room) {
+    $('#videoStatus').textContent = 'Call ready. Joining room...';
+    setTimeout(() => joinCall(), 200);
   }
 }
 
@@ -99,6 +105,7 @@ async function joinCall() {
   });
 
   $('#joinBtn').disabled = true;
+  console.info('CALL_JOINING', { callId: localStorage.getItem('activeVideoCallId') || localStorage.getItem('incomingCallId'), roomId: room, patientId: App.user._id });
 }
 
 function createPeerConnection() {

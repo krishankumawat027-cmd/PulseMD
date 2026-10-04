@@ -1252,6 +1252,109 @@ const App = {
       this.updatePatientNotificationBadges();
     }
   },
+  ensureIncomingCallModal() {
+    if (document.querySelector('#pulsemdIncomingCallModal')) return;
+    const modal = document.createElement('div');
+    modal.id = 'pulsemdIncomingCallModal';
+    modal.hidden = true;
+    modal.className = 'pulsemd-call-modal';
+    modal.innerHTML = `
+      <div class="pulsemd-call-backdrop" aria-hidden="true"></div>
+      <div class="pulsemd-call-dialog" role="dialog" aria-modal="true" aria-labelledby="pulsemdIncomingCallTitle">
+        <div class="pulsemd-call-header">
+          <div class="avatar avatar-fallback" id="pulsemdIncomingCallAvatar">DR</div>
+          <div>
+            <p class="muted">Incoming Call</p>
+            <h3 id="pulsemdIncomingCallTitle">Dr. Name</h3>
+          </div>
+        </div>
+        <p id="pulsemdIncomingCallMeta" class="pulsemd-call-meta">Video call</p>
+        <div class="actions pulsemd-call-actions">
+          <button type="button" id="pulsemdAcceptCallBtn">Accept</button>
+          <button type="button" id="pulsemdDeclineCallBtn" class="secondary">Decline</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    document.getElementById('pulsemdAcceptCallBtn')?.addEventListener('click', async () => {
+      const callId = localStorage.getItem('incomingCallId');
+      const roomId = localStorage.getItem('incomingCallRoomId');
+      if (!callId) return;
+      try {
+        const response = await App.request('/api/video-call/accept', {
+          method: 'POST',
+          body: JSON.stringify({ callId, roomId })
+        });
+        localStorage.setItem('activeVideoCallId', response.call?._id || callId);
+        localStorage.setItem('activeCallRoomId', response.call?.roomId || roomId);
+        localStorage.setItem('callMode', response.call?.callType || localStorage.getItem('callMode') || 'video');
+        this.hideIncomingCallModal();
+        window.location.href = '/video.html';
+      } catch (error) {
+        console.warn('Could not accept incoming call:', error.message);
+        this.hideIncomingCallModal();
+        alert(error.message || 'Could not accept call.');
+      }
+    });
+
+    document.getElementById('pulsemdDeclineCallBtn')?.addEventListener('click', async () => {
+      const callId = localStorage.getItem('incomingCallId');
+      if (!callId) {
+        this.hideIncomingCallModal();
+        return;
+      }
+      try {
+        await App.request('/api/video-call/decline', {
+          method: 'POST',
+          body: JSON.stringify({ callId })
+        });
+      } catch (error) {
+        console.warn('Could not decline incoming call:', error.message);
+      }
+      this.hideIncomingCallModal();
+    });
+  },
+  showIncomingCallModal(call = {}) {
+    this.ensureIncomingCallModal();
+    const modal = document.getElementById('pulsemdIncomingCallModal');
+    if (!modal) return;
+
+    const doctorName = call.doctorName || call.doctor?.name || 'Doctor';
+    const callType = call.callType === 'audio' ? 'Audio Call' : 'Video Call';
+    const roomId = call.roomId || call.room || '';
+    const doctorId = call.doctorId || call.doctor?._id || '';
+
+    const title = document.getElementById('pulsemdIncomingCallTitle');
+    const meta = document.getElementById('pulsemdIncomingCallMeta');
+    const avatar = document.getElementById('pulsemdIncomingCallAvatar');
+    if (title) title.textContent = `Dr. ${doctorName}`;
+    if (meta) meta.textContent = `${callType} • ${roomId}`;
+    if (avatar) {
+      avatar.textContent = doctorName ? doctorName.split(' ').map((part) => part[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || 'DR' : 'DR';
+    }
+
+    localStorage.setItem('incomingCallId', call.callId || call._id || '');
+    localStorage.setItem('incomingCallRoomId', roomId);
+    localStorage.setItem('incomingDoctorId', doctorId);
+    localStorage.setItem('callMode', call.callType || 'video');
+
+    modal.hidden = false;
+    document.body.classList.add('modal-open');
+
+    if (document.hidden && 'Notification' in window && Notification.permission === 'granted') {
+      new Notification('Incoming call', { body: `Dr. ${doctorName} is calling you.` });
+    }
+  },
+  hideIncomingCallModal() {
+    const modal = document.getElementById('pulsemdIncomingCallModal');
+    if (!modal) return;
+    modal.hidden = true;
+    document.body.classList.remove('modal-open');
+    localStorage.removeItem('incomingCallId');
+    localStorage.removeItem('incomingCallRoomId');
+    localStorage.removeItem('incomingDoctorId');
+  },
   connectPatientNotifications() {
     const user = this.user;
     if (!user || user.role !== 'patient' || typeof io === 'undefined') return;
@@ -1267,6 +1370,21 @@ const App = {
       await this.loadPatientNotificationDropdown();
       if (typeof window.refreshPatientNotifications === 'function') {
         await window.refreshPatientNotifications();
+      }
+    });
+    socket.on('videoCallStatus', (notice) => {
+      const status = String(notice?.status || '').toLowerCase();
+      if (status === 'ringing' || status === 'calling') {
+        this.showIncomingCallModal({
+          ...notice.call,
+          doctorName: notice.call?.doctorName || notice.doctorName || 'Doctor',
+          doctorId: notice.call?.doctorId || notice.doctorId,
+          callId: notice.call?.callId || notice.call?._id,
+          roomId: notice.call?.roomId || notice.roomId,
+          callType: notice.call?.callType || notice.callType || 'video'
+        });
+      } else if (status === 'accepted' || status === 'declined' || status === 'ended' || status === 'missed') {
+        this.hideIncomingCallModal();
       }
     });
     socket.on('connect_error', (error) => {

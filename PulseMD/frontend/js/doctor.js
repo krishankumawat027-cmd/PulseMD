@@ -1703,16 +1703,39 @@ function initDoctorVideoPage() {
   if (!user) return;
   doctorShell('video');
   const callMode = localStorage.getItem('callMode') === 'audio' ? 'audio' : 'video';
-  $('#roomName').textContent = localStorage.getItem('doctorVideoRoom') || user._id;
+  const room = localStorage.getItem('doctorVideoRoom') || localStorage.getItem('activeCallRoomId') || user._id;
+  $('#roomName').textContent = room;
   $('#patientName').textContent = localStorage.getItem('activePatientName') || 'Patient';
   document.body.classList.toggle('audio-call', callMode === 'audio');
   $('#cameraBtn').hidden = callMode === 'audio';
   const pageTitle = document.querySelector('.page-head h1');
   if (pageTitle) pageTitle.textContent = callMode === 'audio' ? 'Audio call' : 'Video call';
+
+  doctorSocket = App.socket();
+  doctorSocket.on('connect', () => {
+    doctorSocket.emit('join-video', { roomId: room });
+    $('#videoStatus').textContent = 'Waiting for patient...';
+  });
+
+  doctorSocket.on('videoCallStatus', (payload) => {
+    const status = String(payload?.status || '').toLowerCase();
+    if (status === 'accepted') {
+      $('#videoStatus').textContent = 'Patient accepted the call. Connecting...';
+      setTimeout(() => acceptDoctorCall(), 150);
+    } else if (status === 'declined') {
+      $('#videoStatus').textContent = 'Patient declined the call.';
+    } else if (status === 'missed') {
+      $('#videoStatus').textContent = 'Patient did not answer.';
+    }
+  });
+
+  if (localStorage.getItem('activeVideoCallId')) {
+    $('#videoStatus').textContent = 'Calling patient...';
+  }
 }
 
 async function acceptDoctorCall() {
-  const room = localStorage.getItem('doctorVideoRoom') || App.user._id;
+  const room = localStorage.getItem('doctorVideoRoom') || localStorage.getItem('activeCallRoomId') || App.user._id;
   const callMode = localStorage.getItem('callMode') === 'audio' ? 'audio' : 'video';
   $('#videoStatus').textContent = callMode === 'audio' ? 'Opening microphone...' : 'Opening camera...';
 
@@ -1725,24 +1748,20 @@ async function acceptDoctorCall() {
     return;
   }
 
-  doctorSocket = App.socket();
+  if (!doctorSocket) doctorSocket = App.socket();
   doctorPeer = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
   doctorStream.getTracks().forEach((track) => doctorPeer.addTrack(track, doctorStream));
 
   doctorPeer.ontrack = (event) => {
     $('#remoteVideo').srcObject = event.streams[0];
     $('#videoStatus').textContent = 'Connected';
+    console.info('CALL_CONNECTED', { callId: localStorage.getItem('activeVideoCallId'), roomId: room, doctorId: App.user._id });
     updateActiveVideoCall('connected');
   };
 
   doctorPeer.onicecandidate = (event) => {
     if (event.candidate) doctorSocket.emit('ice-candidate', { room, candidate: event.candidate });
   };
-
-  doctorSocket.on('connect', () => {
-    doctorSocket.emit('join-video', { roomId: room });
-    $('#videoStatus').textContent = 'Waiting for patient...';
-  });
 
   doctorSocket.on('offer', async ({ offer }) => {
     await doctorPeer.setRemoteDescription(new RTCSessionDescription(offer));
@@ -1758,6 +1777,10 @@ async function acceptDoctorCall() {
   doctorSocket.on('ice-candidate', async ({ candidate }) => {
     if (candidate) await doctorPeer.addIceCandidate(new RTCIceCandidate(candidate));
   });
+
+  if (localStorage.getItem('activeVideoCallId')) {
+    console.info('CALL_RINGING', { callId: localStorage.getItem('activeVideoCallId'), roomId: room, doctorId: App.user._id });
+  }
 
   $('#acceptCallBtn').disabled = true;
 }
